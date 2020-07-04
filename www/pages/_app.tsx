@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                         WebkitAppearance: 'none',
                     },
                     body: {
-                        backgroundColor: 'rgb(245,247,251)',
+                        // bg: '#e5e5e5',
                         color: 'black',
                         fontSize: '14px',
                         lineHeight: '24px',
