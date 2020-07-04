@@ -23,7 +23,7 @@ export function Layout({ children }: PropsWithChildren<{}>) {
             }}
             bg='#e5e5e5'
         >
-            <Center gridArea='Center' maxW='500px' bg='white'>
+            <Center gridArea='Center' w='100vw' maxW='500px' bg='white'>
                 {children}
             </Center>
         </Container>

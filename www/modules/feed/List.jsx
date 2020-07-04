@@ -3,6 +3,8 @@ import { useState } from 'reinspect'
 import { Box, Text, Button, Collapse, Icon } from '@chakra-ui/core'
 import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { useVirtual } from 'react-virtual'
+import Link from 'next/link'
+import faker from 'faker'
 
 import { withDataId } from '~/utils'
 import { font10, font16 } from '~/styles/fonts'
@@ -14,24 +16,27 @@ const Views = withDataId('View', { ...font10, borderRadius: '2px', bg: 'black', 
 
 const Element = () => {
     let nViews = useAutoMemo(() => Math.floor(Math.random() * 1000))
+    let title = useAutoMemo(() => faker.lorem.sentence())
 
     return (
-        <Box>
-            <Box h='199px' bg='#4F4F4F' pos='relative'>
-                <Views p='3px' d='flex' pos='absolute' top='15px' left='15px'>
-                    <Box mr='3px'>
-                        <Box as={Eye} />
-                    </Box>
-                    {nViews}
-                </Views>
-            </Box>
-            <Box d='flex' alignItems='center' mt='11px'>
-                <Box mr='15px' ml='3px'>
-                    <Box as={Head} />
+        <Link href='/stream'>
+            <a>
+                <Box h='199px' bg='#4F4F4F' pos='relative'>
+                    <Views p='3px' d='flex' pos='absolute' top='15px' left='15px'>
+                        <Box mr='3px'>
+                            <Box as={Eye} />
+                        </Box>
+                        {nViews}
+                    </Views>
                 </Box>
-                Lorem ipsum dolor sit amet, consectetur damkwfkjuh
-            </Box>
-        </Box>
+                <Box d='flex' alignItems='center' mt='11px'>
+                    <Box mr='15px' ml='3px'>
+                        <Box as={Head} />
+                    </Box>
+                    {title}
+                </Box>
+            </a>
+        </Link>
     )
 }
 
