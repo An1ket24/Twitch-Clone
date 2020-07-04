@@ -1,6 +1,7 @@
 import { List } from './List'
-import { Avatar, Divider, Box, Text, Button, Collapse, Icon } from '@chakra-ui/core'
+import { Avatar, Divider, Box, Text, Button, Collapse, Icon, IconButton } from '@chakra-ui/core'
 import { Tags } from './Tags'
+import Link from 'next/link'
 
 import { font36, fontRoboto } from '~/styles/fonts'
 import { House, Troffee, Star, Svg123, CameraTriangle, CameraSquare } from '~/svg'
@@ -29,7 +30,9 @@ export function Bottom() {
                 </Box>
             </Box>
             <Star />
-            <Troffee />
+            <Link href='/stream'>
+                <IconButton icon={Troffee} variant='ghost' />
+            </Link>
         </Box>
     )
 }

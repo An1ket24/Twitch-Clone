@@ -11,19 +11,29 @@ export let font36 = {
     fontSize: '36px',
     lineHeight: '43px',
 }
-export let font16 = {
+export let font20 = {
     ...fontRoboto,
-    fontSize: '16px',
-    lineHeight: '19px',
+    fontSize: '20px',
+    lineHeight: '23px',
 }
 export let font18 = {
     ...fontRoboto,
     fontSize: '18px',
 }
+export let font16 = {
+    ...fontRoboto,
+    fontSize: '16px',
+    lineHeight: '19px',
+}
 export let font15 = {
     ...fontRoboto,
     fontSize: '15px',
     lineHeight: '18px',
+}
+export let font14 = {
+    ...fontRoboto,
+    fontSize: '14px',
+    lineHeight: '16px',
 }
 export let font10 = {
     ...fontRoboto,
