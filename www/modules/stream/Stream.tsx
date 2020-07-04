@@ -38,6 +38,8 @@ export function Stream() {
                 px={xPadding}
                 boxShadow='0px -2px 4px rgba(0, 0, 0, 0.15)'
                 pos='fixed'
+                bg='white'
+                zIndex={100}
                 bottom='0'
                 w='100%'
                 maxW='500px'
