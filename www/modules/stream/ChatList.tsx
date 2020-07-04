@@ -22,14 +22,16 @@ let Row: FC<{ time: string; user: string; avatarColor: string; text: string } & 
             <Box flex={0}>
                 <Avatar fill={avatarColor} />
             </Box>
-            <Box ml='10px' {...font14} color='#969696'>
-                {time}
-            </Box>
-            <Box ml='10px' {...font16} fontWeight='bold' color='#6F6F6F'>
-                {user}
-            </Box>
-            <Box ml='25px' {...font16}>
-                {text}
+            <Box d='flex' alignItems='baseline'>
+                <Box ml='10px' {...font14} color='#969696'>
+                    {time}
+                </Box>
+                <Box ml='10px' {...font16} fontWeight='bold' color='#6F6F6F'>
+                    {user}
+                </Box>
+                <Box ml='25px' {...font16}>
+                    {text}
+                </Box>
             </Box>
         </Box>
     )
