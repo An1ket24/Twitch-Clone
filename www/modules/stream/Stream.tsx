@@ -7,11 +7,11 @@ import { Panel } from './Panel'
 import { ChatList } from './ChatList'
 import { Send, Smiley } from '~/svg'
 
-let xPadding = '18px'
+let xPadding = '13px'
 
 export function Stream() {
     return (
-        <Box data-id='Stream' h='100vh' pb='53px' d='flex' flexDir='column'>
+        <Box data-id='Stream' h='100vh' pb='57px' d='flex' flexDir='column'>
             <Box pos='relative'>
                 <Link href='/'>
                     <IconButton
@@ -42,7 +42,7 @@ export function Stream() {
                 // zIndex={100}
                 bottom='0'
                 w='100%'
-                maxW='500px'
+                maxW='450px'
             >
                 <NewMessage />
             </Box>

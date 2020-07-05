@@ -5,7 +5,7 @@ import { Tags } from './Tags'
 import { Top } from './Top'
 import { Bottom } from './Bottom'
 
-let xPadding = '7px'
+let xPadding = '13px'
 
 export function Feed() {
     useLayoutEffect(() => {

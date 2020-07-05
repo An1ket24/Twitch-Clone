@@ -6,7 +6,7 @@ const Container = withDataId('Layout')
 const Center = withDataId('Center', { as: 'main' })
 
 export function Layout({ children }: PropsWithChildren<{}>) {
-    const isMobile = useMediaQuery({ query: '(max-width: 550px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     return (
         <Container
@@ -23,7 +23,7 @@ export function Layout({ children }: PropsWithChildren<{}>) {
             }}
             bg='#e5e5e5'
         >
-            <Center gridArea='Center' w='100vw' maxW='500px' bg='white'>
+            <Center gridArea='Center' w='100vw' maxW='450px' bg='white'>
                 {children}
             </Center>
         </Container>

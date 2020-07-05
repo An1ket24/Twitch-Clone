@@ -16,19 +16,23 @@ let Row: FC<{ time: string; user: string; avatarColor: string; text: string } & 
     text,
 }) => {
     return (
-        <Box data-id='Row' d='flex'>
+        <Box data-id='Row' d='flex' alignItems='flex-start'>
             <Box flex={0}>
                 <Avatar fill={avatarColor} />
             </Box>
-            <Box d='flex' alignItems='baseline'>
-                <Box ml='10px' {...font14} color='#969696'>
-                    {time}
-                </Box>
-                <Box ml='10px' {...font16} fontWeight='bold' color='#6F6F6F'>
-                    {user}
-                </Box>
-                <Box ml='25px' {...font16}>
-                    {text}
+            <Box ml='15px' d='flex' flexDirection='column' minH='35px' mt='-2px'>
+                {/* center verticall on the avatar, when sentence is short, otherwise top leveled with avatar */}
+                <Box flexShrink={1} flexGrow={1} minH={0} maxH='11px' />
+                <Box flexGrow={0} d='inline-block' {...font16}>
+                    <Box as='span' {...font14} color='#969696'>
+                        {time}
+                    </Box>
+                    <Box as='span' ml='8px' fontWeight='bold' color='#6F6F6F'>
+                        {user}
+                    </Box>
+                    <Box as='span' ml='8px'>
+                        {text}
+                    </Box>
                 </Box>
             </Box>
         </Box>
@@ -62,14 +66,13 @@ let ar = [...Array(len).keys()].map((__, index) => {
         user: faker.internet.userName(),
         avatarColor: _.sample(colors) ?? '#FF8C00',
         time: generateTime(index, len),
-        text: faker.lorem.sentence(),
+        text: index % 7 ? faker.lorem.sentence() : 'short sentence',
     }
 })
 
 export function ChatList() {
     let ref = useRef<HTMLElement>()
     let [data, setData] = useState(ar, 'setChatData')
-    let [n, setN] = useState(20, 'setChatNRows')
 
     useAutoEffect(() => {
         let int = setInterval(() => {
@@ -86,7 +89,7 @@ export function ChatList() {
             d='grid'
             gridAutoFlow='row'
             alignContent='end'
-            gridGap='12px'
+            gridGap='15px'
             pb='8px'
             h='100%'
         >

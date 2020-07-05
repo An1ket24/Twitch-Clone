@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react'
 import { useState } from 'reinspect'
-import { Box, Text, Button, Collapse, Icon } from '@chakra-ui/core'
+import { Box, Text, Button, Collapse, Icon, Image } from '@chakra-ui/core'
 import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { useVirtual } from 'react-virtual'
 import Link from 'next/link'
@@ -21,13 +21,14 @@ const Element = () => {
     return (
         <Link href='/stream'>
             <a>
-                <Box h='199px' bg='#4F4F4F' pos='relative'>
+                <Box h='199px' bg='#4F4F4F' pos='relative' overflow='hidden'>
                     <Views p='3px' d='flex' pos='absolute' top='15px' left='15px'>
                         <Box mr='3px'>
                             <Box as={Eye} />
                         </Box>
                         {nViews}
                     </Views>
+                    <Image w='100%' src='video.jpg' />
                 </Box>
                 <Box d='flex' alignItems='center' mt='11px'>
                     <Box mr='15px' ml='3px'>

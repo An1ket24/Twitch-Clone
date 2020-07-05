@@ -8,7 +8,7 @@ import { Send, Smiley } from '~/svg'
 
 export function NewMessage() {
     return (
-        <Box data-id='NewMessage' d='flex' alignItems='center' py='15px'>
+        <Box data-id='NewMessage' d='flex' alignItems='center' py='17px'>
             <Smiley />
             <Box ml='14px' {...font16} color='#A8A8A8'>
                 Chat publicly as George Z...
