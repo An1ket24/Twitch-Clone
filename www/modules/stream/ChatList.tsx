@@ -8,14 +8,12 @@ import format from 'date-fns/format'
 
 import { font16, font14 } from '~/styles/fonts'
 import { Avatar } from '~/svg'
-import { keys } from 'lodash'
 
 let Row: FC<{ time: string; user: string; avatarColor: string; text: string } & BoxProps> = ({
     time,
     avatarColor,
     user,
     text,
-    ...props
 }) => {
     return (
         <Box data-id='Row' d='flex'>
@@ -81,20 +79,17 @@ export function ChatList() {
         return () => clearInterval(int)
     })
 
-    // useAutoEffect(() => {
-    //     let parentHeight = ref.current?.parentElement && getComputedStyle(ref.current.parentElement).height.slice(0, -2)
-    //     let height = ref.current && getComputedStyle(ref.current).height.slice(0, -2)
-    //     console.log('height', height)
-    //     console.log('parentHeight', parentHeight)
-
-    //     if (parentHeight && height && height < parentHeight) {
-    //         setN((_n) => _n + 1)
-    //     }
-    // })
-
     return (
-        <Box ref={ref} data-id='ChatList' d='grid' gridAutoFlow='row' gridGap='12px' pt='9px' pb='8px'>
-            {/* {data.slice(0, n + 1).map((row, index) => ( */}
+        <Box
+            ref={ref}
+            data-id='ChatList'
+            d='grid'
+            gridAutoFlow='row'
+            alignContent='end'
+            gridGap='12px'
+            pb='8px'
+            h='100%'
+        >
             {data.map((row, index) => (
                 <Row key={index} {...row} />
             ))}

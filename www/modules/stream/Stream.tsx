@@ -11,7 +11,7 @@ let xPadding = '18px'
 
 export function Stream() {
     return (
-        <Box data-id='Stream' h='100vh' pb='95px' d='flex' flexDir='column'>
+        <Box data-id='Stream' h='100vh' pb='53px' d='flex' flexDir='column'>
             <Box pos='relative'>
                 <Link href='/'>
                     <IconButton
@@ -27,11 +27,11 @@ export function Stream() {
                 </Link>
                 <Image w='full' src='video.jpg' />
             </Box>
-            <Box px={xPadding} boxShadow='0px 3px 4px rgba(0, 0, 0, 0.25)'>
+            <Box px={xPadding}>
                 <Panel />
             </Box>
 
-            <Box px={xPadding} mt='10px' flex={1} overflow='hidden'>
+            <Box px={xPadding} flex={1} boxShadow='inset 0px 3px 4px -2px rgba(0, 0, 0, 0.25)' overflow='hidden'>
                 <ChatList />
             </Box>
             <Box
@@ -39,7 +39,7 @@ export function Stream() {
                 boxShadow='0px -2px 4px rgba(0, 0, 0, 0.15)'
                 pos='fixed'
                 bg='white'
-                zIndex={100}
+                // zIndex={100}
                 bottom='0'
                 w='100%'
                 maxW='500px'

@@ -51,7 +51,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                     <meta
                         charSet='utf-8'
                         name='viewport'
-                        content='width=device-width, initial-scale=1, shrink-to-fit=no'
+                        content='width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, maximum-scale=1'
                     />
                     <meta name='description' content='Giftbox' />
                     <title>Web RTC</title>

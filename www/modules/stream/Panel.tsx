@@ -8,8 +8,8 @@ import { User, Gift } from '~/svg'
 
 export function Panel() {
     return (
-        <Box data-id='Panel' d='flex' alignItems='center' pt='15px' pb='12px'>
-            <Box>
+        <Box data-id='Panel' d='flex' alignItems='center' pt='12px' pb='9px'>
+            <Box mr='9px'>
                 <Box {...font20}>Live chat</Box>
                 <Box d='flex' alignItems='baseline'>
                     <User />

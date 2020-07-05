@@ -1,0 +1,12 @@
+    useAutoEffect(() => {
+        let parentHeight = ref.current?.parentElement && getComputedStyle(ref.current.parentElement).height.slice(0, -2)
+        let height = ref.current && getComputedStyle(ref.current).height.slice(0, -2)
+        console.log('height', height)
+        console.log('parentHeight', parentHeight)
+
+        if (parentHeight && height && height < parentHeight) {
+            setN((_n) => _n + 1)
+        }
+    })
+
+            {data.slice(0, n + 1).map((row, index) => (

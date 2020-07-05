@@ -44,7 +44,7 @@ export function List() {
     const parentRef = useRef()
 
     const rowVirtualizer = useVirtual({
-        size: 10000,
+        size: 30,
         parentRef,
         estimateSize: useAutoCallback(() => 285),
         overscan: 5,
