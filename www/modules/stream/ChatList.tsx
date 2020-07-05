@@ -66,7 +66,7 @@ let ar = [...Array(len).keys()].map((__, index) => {
         user: faker.internet.userName(),
         avatarColor: _.sample(colors) ?? '#FF8C00',
         time: generateTime(index, len),
-        text: index % 7 ? faker.lorem.sentence() : 'short sentence',
+        text: index % 7 ? faker.lorem.sentence() : 'short',
     }
 })
 
