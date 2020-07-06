@@ -34,13 +34,13 @@ const NoSSR = (Component: any) => (props: any) => (
 
 const Auth: FC = ({ children }) => {
     const isAuth = useStoreState((state) => state.isAuth)
+    let PASSWORD = useStoreState((state) => state.PASSWORD)
     let setAuth = useStoreActions((state) => state.setAuth)
+    let readStoredPassword = useStoreActions((state) => state.readStoredPassword)
 
     if (!isAuth) {
-        let isVisited = localStorage.getItem('web-rtc')
-        if (isVisited) {
+        if (readStoredPassword() === PASSWORD) {
             setAuth(true)
-            localStorage.setItem('web-rtc', 'signed-in')
         } else {
             return <Login />
         }

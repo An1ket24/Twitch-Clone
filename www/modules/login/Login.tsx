@@ -18,9 +18,10 @@ import { Password } from './Password'
 
 import { font18 } from '~/styles/fonts'
 import { useStoreActions } from '~/store/hooks'
+import { useStoreState } from 'easy-peasy'
 
 // const DEV_PASSWORD = '1'
-const PASSWORD = 'ar11'
+// const PASSWORD = 'ar11'
 
 // console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 // console.log('process.env.PASSWORD', process.env.PASSWORD)
@@ -31,6 +32,8 @@ export const Login = () => {
     const [value, setValue] = useState('', 'setPasswordValue')
     const [error, setError] = useState('', 'setError')
     let setAuth = useStoreActions((state) => state.setAuth)
+    let storePassword = useStoreActions((state) => state.storePassword)
+    let PASSWORD = useStoreState((state) => state.PASSWORD)
 
     let handleChange = useAutoCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value)
@@ -41,7 +44,7 @@ export const Login = () => {
         // if (process.env.NODE_ENV === 'production' ? value === process.env.PASSWORD : value === DEV_PASSWORD) {
         if (value === PASSWORD) {
             setAuth(true)
-            localStorage.setItem('web-rtc', 'signed-in')
+            storePassword(PASSWORD)
         } else {
             setError('Wrong password')
         }
