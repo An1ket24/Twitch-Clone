@@ -14,7 +14,7 @@ export function Feed() {
     }, [])
 
     return (
-        <Box data-id='Feed' h='100vh' pt='12px' pb='65px' overflow='auto'>
+        <Box data-id='Feed' pt='12px' pb='65px'>
             <Box px={xPadding} pb='3px' h='46px'>
                 <Top />
             </Box>

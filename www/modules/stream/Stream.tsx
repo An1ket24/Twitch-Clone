@@ -15,7 +15,7 @@ export function Stream() {
     let image = (router.query.image as string) ?? 'video.jpg'
 
     return (
-        <Box data-id='Stream' h='100vh' pb='57px' d='flex' flexDir='column' overflow='auto' w='100%' maxW='450px'>
+        <Box data-id='Stream' pb='57px' d='flex' flexDir='column' w='100%' maxW='450px'>
             <Box pos='fixed' top={0} w='100%' maxW='450px' bg='white ' boxShadow='0px 3px 4px rgba(0, 0, 0, 0.25)'>
                 <Box pos='relative'>
                     <Link href='/'>

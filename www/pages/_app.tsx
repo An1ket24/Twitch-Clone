@@ -71,11 +71,11 @@ function MyApp({ Component, pageProps }: AppProps) {
                         color: 'black',
                         fontSize: '14px',
                         lineHeight: '24px',
-                        overflow: 'auto',
-                        height: '100vh',
+                        // display: 'block',
+                        margin: 0,
                     },
                     '#__next': {
-                        overflow: 'auto',
+                        // display: 'block',
                     },
                 }}
             />
@@ -122,9 +122,9 @@ function MyApp({ Component, pageProps }: AppProps) {
                         //     }
                         // }}
                         // >*/}
-                        <Layout>
-                            <Component {...pageProps} />
-                        </Layout>
+                        {/* <Layout> */}
+                        <Component {...pageProps} />
+                        {/* </Layout> */}
                         {/* </div>*/}
                     </Auth>
                 </StateInspector>

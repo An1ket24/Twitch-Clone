@@ -3,7 +3,7 @@ import { withDataId } from '~/utils'
 import { useMediaQuery } from 'react-responsive'
 
 const Container = withDataId('Layout')
-const Center = withDataId('Center', { as: 'main' })
+const Center = withDataId('Center', { as: 'div', display: 'block' })
 
 export function Layout({ children }: PropsWithChildren<{}>) {
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
@@ -11,15 +11,16 @@ export function Layout({ children }: PropsWithChildren<{}>) {
     return (
         <Container
             {...{
-                d: 'grid',
-                position: 'fixed',
-                justifyItems: 'center',
-                gridTemplateColumns: '1fr',
-                gridTemplateRows: '1fr',
-                gridTemplateAreas: `
-                    'Center'
-                `,
-                w: 'full',
+                d: 'block',
+                // d: 'grid',
+                // position: 'fixed',
+                // justifyItems: 'center',
+                // gridTemplateColumns: '1fr',
+                // gridTemplateRows: '1fr',
+                // gridTemplateAreas: `
+                // 'Center'
+                // `,
+                // w: 'full',
             }}
             bg='#e5e5e5'
         >
