@@ -19,7 +19,10 @@ import { Password } from './Password'
 import { font18 } from '~/styles/fonts'
 import { useStoreActions } from '~/store/hooks'
 
-let password = 'serious'
+const DEV_PASSWORD = '1'
+
+console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+console.log('process.env.PASSWORD', process.env.PASSWORD)
 
 export const Login = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -33,7 +36,7 @@ export const Login = () => {
     let handleSubmit = useAutoCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         console.log('submitting', value)
-        if (value === password) {
+        if (process.env.NODE_ENV === 'production' ? value === process.env.PASSWORD : value === DEV_PASSWORD) {
             setAuth(true)
         } else {
             setError('Wrong password')
