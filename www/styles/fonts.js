@@ -16,6 +16,10 @@ export let font20 = {
     fontSize: '20px',
     lineHeight: '23px',
 }
+export let font17 = {
+    ...fontRoboto,
+    fontSize: '17px',
+}
 export let font18 = {
     ...fontRoboto,
     fontSize: '18px',
