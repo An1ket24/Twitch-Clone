@@ -52,7 +52,7 @@ export function List() {
     })
 
     return (
-        <Container ref={parentRef} w='full' h='full' overflow='auto'>
+        <Container ref={parentRef} w='full' h='full'>
             <div
                 style={{
                     height: `${rowVirtualizer.totalSize}px`,

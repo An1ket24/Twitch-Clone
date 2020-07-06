@@ -14,7 +14,7 @@ export function Feed() {
     }, [])
 
     return (
-        <Box data-id='Feed' h='100vh' pt='12px'>
+        <Box data-id='Feed' h='100vh' pt='12px' overflow='auto'>
             <Box px={xPadding} pb='3px' h='46px'>
                 <Top />
             </Box>
@@ -22,10 +22,13 @@ export function Feed() {
             <Box pl={xPadding} h='47px'>
                 <Tags />
             </Box>
-            <Box px={xPadding} h={`calc(var(--vh, 1vh) * 100 - ${12 + 46 + 2 + 47 + 65}px)`}>
+            <Box
+                px={xPadding}
+                // h={`calc(var(--vh, 1vh) * 100 - ${12 + 46 + 2 + 47}px)`}
+            >
                 <List />
             </Box>
-            <Box px={xPadding} h='65px'>
+            <Box px={xPadding} h='65px' pos='fixed' bg='white' zIndex={100} bottom='0' w='100%' maxW='450px'>
                 <Bottom />
             </Box>
         </Box>
