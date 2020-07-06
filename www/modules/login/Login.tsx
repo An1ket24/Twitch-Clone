@@ -23,6 +23,7 @@ const DEV_PASSWORD = '1'
 
 console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 console.log('process.env.PASSWORD', process.env.PASSWORD)
+console.log('process.env.PPASSWORD', process.env.PPASSWORD)
 
 export const Login = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
