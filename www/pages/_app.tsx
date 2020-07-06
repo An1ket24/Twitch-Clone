@@ -71,6 +71,11 @@ function MyApp({ Component, pageProps }: AppProps) {
                         color: 'black',
                         fontSize: '14px',
                         lineHeight: '24px',
+                        overflow: 'auto',
+                        height: '100vh',
+                    },
+                    '#__next': {
+                        overflow: 'auto',
                     },
                 }}
             />
@@ -97,8 +102,8 @@ function MyApp({ Component, pageProps }: AppProps) {
                     </Head>
 
                     <Auth>
-                        <div
-                        // onClick={() => {
+                        {/* <div */}
+                        {/*// onClick={() => {
                         //     if (screenfull.isEnabled) {
                         //         try {
                         //             screenfull.request()
@@ -116,11 +121,11 @@ function MyApp({ Component, pageProps }: AppProps) {
                         //         console.error('ffullscreen error')
                         //     }
                         // }}
-                        >
-                            <Layout>
-                                <Component {...pageProps} />
-                            </Layout>
-                        </div>
+                        // >*/}
+                        <Layout>
+                            <Component {...pageProps} />
+                        </Layout>
+                        {/* </div>*/}
                     </Auth>
                 </StateInspector>
             </StoreProvider>

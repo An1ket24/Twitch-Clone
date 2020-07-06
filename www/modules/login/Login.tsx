@@ -20,7 +20,7 @@ import { font18 } from '~/styles/fonts'
 import { useStoreActions } from '~/store/hooks'
 
 // const DEV_PASSWORD = '1'
-const PASSWORD = 'really'
+const PASSWORD = 'ar11'
 
 // console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 // console.log('process.env.PASSWORD', process.env.PASSWORD)
