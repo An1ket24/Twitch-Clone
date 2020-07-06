@@ -13,6 +13,7 @@
     "@emotion/styled": "^10.0.27",
     "chance": "^1.1.6",
     "date-fns": "^2.14.0",
+    "easy-peasy": "^3.3.1",
     "emotion-theming": "^10.0.27",
     "faker": "^4.1.0",
     "lodash": "^4.17.15",

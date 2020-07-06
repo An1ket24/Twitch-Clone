@@ -8,10 +8,13 @@ import { CSSReset, Grid, Spinner } from '@chakra-ui/core'
 import { Global } from '@emotion/core'
 import screenfull from 'screenfull'
 import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
+import { StoreProvider } from 'easy-peasy'
 
 import { theme } from '~/styles/theme'
+import { store } from '~/store/store'
 import { Layout } from '~/Layout'
 import { Login } from '~/modules/login/Login'
+import { useStoreState } from '~/store/hooks'
 
 const DefaultOnSSR = () => <span />
 
@@ -28,6 +31,15 @@ const NoSSR = (Component: any) => (props: any) => (
         <Component {...props} />
     </NoSSRComponent>
 )
+
+const Auth: FC = ({ children }) => {
+    const isAuth = useStoreState((state) => state.isAuth)
+    if (!isAuth) {
+        return <Login />
+    }
+
+    return <>{children}</>
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
     console.log('App MOUNT')
@@ -54,52 +66,56 @@ function MyApp({ Component, pageProps }: AppProps) {
                     },
                 }}
             />
-            <StateInspector name='App'>
-                <Head>
-                    {/* <meta charSet='utf-8' name='viewport' content='width=1170' /> */}
-                    <meta
-                        charSet='utf-8'
-                        name='viewport'
-                        content='width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, maximum-scale=1'
-                    />
-                    <meta name='description' content='WEB-RTC' />
-                    <meta name='apple-mobile-web-app-capable' content='yes' />
-                    <meta name='mobile-web-app-capable' content='yes' />
-                    <meta name='apple-mobile-web-app-status-bar-style' content='black' />
-                    <title>Web RTC</title>
-                    <link href='https://fonts.googleapis.com/css2?family=Roboto&display=swap' rel='stylesheet' />
-                    <link
-                        href='https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap'
-                        rel='stylesheet'
-                    />
-                    <link rel='icon' type='image/x-icon' href='favicon.ico' />
-                </Head>
-                <Login />
-                <div
-                // onClick={() => {
-                //     if (screenfull.isEnabled) {
-                //         try {
-                //             screenfull.request()
-                //         } catch (error) {
-                //             console.error('fullscreen error')
-                //         }
-                //     }
-                // }}
-                // onDrag={() => {
-                //     try {
-                //         if (screenfull.isEnabled) {
-                //             screenfull.request()
-                //         }
-                //     } catch (error) {
-                //         console.error('ffullscreen error')
-                //     }
-                // }}
-                >
-                    <Layout>
-                        <Component {...pageProps} />
-                    </Layout>
-                </div>
-            </StateInspector>
+            <StoreProvider store={store}>
+                <StateInspector name='App'>
+                    <Head>
+                        {/* <meta charSet='utf-8' name='viewport' content='width=1170' /> */}
+                        <meta
+                            charSet='utf-8'
+                            name='viewport'
+                            content='width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, maximum-scale=1'
+                        />
+                        <meta name='description' content='WEB-RTC' />
+                        <meta name='apple-mobile-web-app-capable' content='yes' />
+                        <meta name='mobile-web-app-capable' content='yes' />
+                        <meta name='apple-mobile-web-app-status-bar-style' content='black' />
+                        <title>Web RTC</title>
+                        <link href='https://fonts.googleapis.com/css2?family=Roboto&display=swap' rel='stylesheet' />
+                        <link
+                            href='https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap'
+                            rel='stylesheet'
+                        />
+                        <link rel='icon' type='image/x-icon' href='favicon.ico' />
+                    </Head>
+
+                    <Auth>
+                        <div
+                        // onClick={() => {
+                        //     if (screenfull.isEnabled) {
+                        //         try {
+                        //             screenfull.request()
+                        //         } catch (error) {
+                        //             console.error('fullscreen error')
+                        //         }
+                        //     }
+                        // }}
+                        // onDrag={() => {
+                        //     try {
+                        //         if (screenfull.isEnabled) {
+                        //             screenfull.request()
+                        //         }
+                        //     } catch (error) {
+                        //         console.error('ffullscreen error')
+                        //     }
+                        // }}
+                        >
+                            <Layout>
+                                <Component {...pageProps} />
+                            </Layout>
+                        </div>
+                    </Auth>
+                </StateInspector>
+            </StoreProvider>
         </ThemeProvider>
     )
 }

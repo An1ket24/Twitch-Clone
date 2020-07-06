@@ -18,17 +18,18 @@ import { font16 } from '~/styles/fonts'
 export const Password: FC<
     InputProps & {
         value: string
+        error: string
         label: string
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     }
-> = ({ label, value, onChange, ...props }) => {
+> = ({ label, value, onChange, error, ...props }) => {
     const [show, setShow] = useState(false)
     let submitting = false
     let id = label
     let name = id
 
     return (
-        <FormControl>
+        <FormControl pos='relative' isInvalid={!!error}>
             <FormLabel {...font16} {...{ fontWeight: '400' }} htmlFor={id}>
                 {label}
             </FormLabel>
@@ -56,6 +57,7 @@ export const Password: FC<
                     />
                 </InputRightElement>
             </InputGroup>
+            <FormErrorMessage {...{ position: 'absolute' }}>{error}</FormErrorMessage>
         </FormControl>
     )
 }

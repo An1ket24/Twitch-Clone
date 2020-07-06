@@ -17,16 +17,27 @@ import {
 import { Password } from './Password'
 
 import { font18 } from '~/styles/fonts'
+import { useStoreActions } from '~/store/hooks'
+
+let password = 'serious'
 
 export const Login = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [value, setValue] = useState('', 'setPasswordValue')
+    const [error, setError] = useState('', 'setError')
+    let setAuth = useStoreActions((state) => state.setAuth)
+
     let handleChange = useAutoCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value)
     })
     let handleSubmit = useAutoCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         console.log('submitting', value)
+        if (value === password) {
+            setAuth(true)
+        } else {
+            setError('Wrong password')
+        }
     })
 
     useAutoEffect(() => {
@@ -44,7 +55,7 @@ export const Login = () => {
                     {/* <ModalCloseButton /> */}
                     <ModalBody>
                         <Box d='flex' alignItems='flex-end  '>
-                            <Password label='Password' value={value} onChange={handleChange} />
+                            <Password label='Password' error={error} value={value} onChange={handleChange} />
                             <Button variantColor='orange' ml={5} type='submit'>
                                 Sign In
                             </Button>

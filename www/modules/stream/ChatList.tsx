@@ -92,6 +92,8 @@ export function ChatList() {
             gridGap='15px'
             pb='8px'
             h='100%'
+            w='100%'
+            maxW='450px'
         >
             {data.map((row, index) => (
                 <Row key={index} {...row} />
