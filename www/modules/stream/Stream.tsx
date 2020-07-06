@@ -1,6 +1,7 @@
 import { Divider, Image, Box, Text, IconButton, Collapse, Icon } from '@chakra-ui/core'
 import { BsChevronLeft } from 'react-icons/bs'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 import { NewMessage } from './NewMessage'
 import { Panel } from './Panel'
@@ -10,6 +11,9 @@ import { Send, Smiley } from '~/svg'
 let xPadding = '13px'
 
 export function Stream() {
+    let router = useRouter()
+    let image = (router.query.image as string) ?? 'video.jpg'
+
     return (
         <Box data-id='Stream' h='100vh' pb='57px' d='flex' flexDir='column' overflow='auto'>
             <Box pos='relative'>
@@ -25,7 +29,7 @@ export function Stream() {
                         color='gray.300'
                     />
                 </Link>
-                <Image w='full' src='video.jpg' />
+                <Image w='full' src={image} />
             </Box>
             <Box px={xPadding}>
                 <Panel />

@@ -5,7 +5,7 @@ import { Tags } from './Tags'
 import { Top } from './Top'
 import { Bottom } from './Bottom'
 
-let xPadding = '13px'
+let xPadding = '9px'
 
 export function Feed() {
     useLayoutEffect(() => {
@@ -14,7 +14,7 @@ export function Feed() {
     }, [])
 
     return (
-        <Box data-id='Feed' h='100vh' pt='12px' overflow='auto'>
+        <Box data-id='Feed' h='100vh' pt='12px' pb='65px' overflow='auto'>
             <Box px={xPadding} pb='3px' h='46px'>
                 <Top />
             </Box>
