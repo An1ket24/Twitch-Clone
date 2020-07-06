@@ -77,7 +77,7 @@ export function ChatList() {
     useAutoEffect(() => {
         let int = setInterval(() => {
             // rotate
-            // setData((currentData) => [...currentData.slice(1), currentData[0]])
+            setData((currentData) => [...currentData.slice(1), currentData[0]])
         }, 1500)
         return () => clearInterval(int)
     })
