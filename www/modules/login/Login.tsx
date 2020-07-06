@@ -41,6 +41,7 @@ export const Login = () => {
         // if (process.env.NODE_ENV === 'production' ? value === process.env.PASSWORD : value === DEV_PASSWORD) {
         if (value === PASSWORD) {
             setAuth(true)
+            localStorage.setItem('web-rtc', 'signed-in')
         } else {
             setError('Wrong password')
         }
@@ -51,7 +52,7 @@ export const Login = () => {
     })
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered closeOnEsc={false} closeOnOverlayClick={false}>
             <ModalOverlay />
             <ModalContent rounded='3px' maxW='350px' pt='10px'>
                 <form onSubmit={handleSubmit}>

@@ -14,7 +14,7 @@ import { theme } from '~/styles/theme'
 import { store } from '~/store/store'
 import { Layout } from '~/Layout'
 import { Login } from '~/modules/login/Login'
-import { useStoreState } from '~/store/hooks'
+import { useStoreState, useStoreActions } from '~/store/hooks'
 
 const DefaultOnSSR = () => <span />
 
@@ -34,8 +34,16 @@ const NoSSR = (Component: any) => (props: any) => (
 
 const Auth: FC = ({ children }) => {
     const isAuth = useStoreState((state) => state.isAuth)
+    let setAuth = useStoreActions((state) => state.setAuth)
+
     if (!isAuth) {
-        return <Login />
+        let isVisited = localStorage.getItem('web-rtc')
+        if (isVisited) {
+            setAuth(true)
+            localStorage.setItem('web-rtc', 'signed-in')
+        } else {
+            return <Login />
+        }
     }
 
     return <>{children}</>
