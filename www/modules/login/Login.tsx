@@ -12,6 +12,7 @@ import {
     useDisclosure,
     Button,
     Input,
+    Box,
 } from '@chakra-ui/core'
 import { Password } from './Password'
 
@@ -35,21 +36,22 @@ export const Login = () => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
-            <ModalContent rounded='3px' w='350px'>
+            <ModalContent rounded='3px' maxW='350px' pt='10px'>
                 <form onSubmit={handleSubmit}>
-                    <ModalHeader {...font18} fontWeight='bold'>
+                    {/* <ModalHeader {...font18} fontWeight='bold'>
                         Sign In
-                    </ModalHeader>
-                    <ModalCloseButton />
+                    </ModalHeader> */}
+                    {/* <ModalCloseButton /> */}
                     <ModalBody>
-                        <Password label='Password' value={value} onChange={handleChange} />
+                        <Box d='flex' alignItems='flex-end  '>
+                            <Password label='Password' value={value} onChange={handleChange} />
+                            <Button variantColor='orange' ml={5} type='submit'>
+                                Sign In
+                            </Button>
+                        </Box>
                     </ModalBody>
 
-                    <ModalFooter>
-                        <Button variantColor='orange' mr={3} type='submit'>
-                            Submit
-                        </Button>
-                    </ModalFooter>
+                    <ModalFooter />
                 </form>
             </ModalContent>
         </Modal>
