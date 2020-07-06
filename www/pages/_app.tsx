@@ -7,9 +7,11 @@ import { StateInspector } from 'reinspect'
 import { CSSReset, Grid, Spinner } from '@chakra-ui/core'
 import { Global } from '@emotion/core'
 import screenfull from 'screenfull'
+import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 
 import { theme } from '~/styles/theme'
 import { Layout } from '~/Layout'
+import { Login } from '~/modules/login/Login'
 
 const DefaultOnSSR = () => <span />
 
@@ -32,6 +34,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     // useLayoutEffect(() => {
     // window.scrollTo(0, 1)
     // })
+    // useAutoEffect(() => {
+    //     onOpen()
+    // })
+
     return (
         <ThemeProvider theme={theme}>
             <CSSReset />
@@ -68,6 +74,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                     />
                     <link rel='icon' type='image/x-icon' href='favicon.ico' />
                 </Head>
+                <Login />
                 <div
                 // onClick={() => {
                 //     if (screenfull.isEnabled) {
