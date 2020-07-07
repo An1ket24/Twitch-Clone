@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState } from 'reinspect'
 import { useAutoCallback, useAutoMemo, useAutoEffect, useLayoutAutoEffect } from 'hooks.macro'
-import { roundToNearestMinutesWithOptions } from 'date-fns/fp'
 
 import ConnectionStatus from '~/modules/example/ConnectionStatus'
 import Publisher from '~/modules/example/Publisher'

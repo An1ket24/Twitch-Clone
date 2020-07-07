@@ -65,7 +65,6 @@ function App({ Component, pageProps }: AppProps) {
                         WebkitAppearance: 'none',
                     },
                     body: {
-                        // bg: '#e5e5e5',
                         color: 'black',
                         fontSize: '14px',
                         lineHeight: '24px',
@@ -73,6 +72,7 @@ function App({ Component, pageProps }: AppProps) {
                         margin: 0,
                     },
                     '#__next': {
+                        backgroundColor: '#e5e5e5',
                         // display: 'block',
                     },
                 }}
