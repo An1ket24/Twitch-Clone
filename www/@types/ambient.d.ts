@@ -5,3 +5,6 @@ declare namespace NodeJS {
         PASSWORD: string
     }
 }
+
+declare module 'opentok-react'
+declare module '@opentok/client'

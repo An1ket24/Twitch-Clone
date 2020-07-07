@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, ReactNode, FC, useEffect, useState, ReactElement } from 'react'
+import React, { useLayoutEffect, ReactNode, FC, useEffect, ReactElement } from 'react'
+import { useState } from 'reinspect'
 import Head from 'next/head'
 import { AppProps } from 'next/app'
 import Router from 'next/router'
@@ -9,6 +10,7 @@ import { Global } from '@emotion/core'
 import screenfull from 'screenfull'
 import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { StoreProvider } from 'easy-peasy'
+import { useMountedState } from 'react-use'
 
 import { theme } from '~/styles/theme'
 import { store } from '~/store/store'
@@ -16,21 +18,11 @@ import { Layout } from '~/Layout'
 import { Login } from '~/modules/login/Login'
 import { useStoreState, useStoreActions } from '~/store/hooks'
 
-const DefaultOnSSR = () => <span />
+export let OTSession: any, OTPublisher: any, OTStreams: any, OTSubscriber: any, preloadScript: any
 
-const NoSSRComponent = ({ children }: { children: ReactElement }) => {
-    const [state, setState] = useState(false)
-    useEffect(() => {
-        setState(true)
-    }, [])
-    return state ? children : <DefaultOnSSR />
-}
-
-const NoSSR = (Component: any) => (props: any) => (
-    <NoSSRComponent>
-        <Component {...props} />
-    </NoSSRComponent>
-)
+export let API_KEY = process.env.NEXT_PUBLIC_API_KEY
+export let SESSION_ID = process.env.NEXT_PUBLIC_SESSION_ID
+export let TOKEN = process.env.NEXT_PUBLIC_TOKEN
 
 const Auth: FC = ({ children }) => {
     const isAuth = useStoreState((state) => state.isAuth)
@@ -49,7 +41,7 @@ const Auth: FC = ({ children }) => {
     return <>{children}</>
 }
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
     console.log('App MOUNT')
     // useLayoutEffect(() => {
     // window.scrollTo(0, 1)
@@ -57,7 +49,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     // useAutoEffect(() => {
     //     onOpen()
     // })
-
+    // useAutoEffect(() => {
+    //     let imp = async () => await import('@opentok/client')
+    //     imp().then(() => {
+    //         console.log('imported')
+    //         setLoading(false)
+    //     })
+    // })
     return (
         <ThemeProvider theme={theme}>
             <CSSReset />
@@ -88,6 +86,8 @@ function MyApp({ Component, pageProps }: AppProps) {
                             name='viewport'
                             content='width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, maximum-scale=1'
                         />
+                        {/* <script defer async src='https://static.opentok.com/v2/js/opentok.min.js' /> */}
+
                         <meta name='description' content='WEB-RTC' />
                         <meta name='apple-mobile-web-app-capable' content='yes' />
                         <meta name='mobile-web-app-capable' content='yes' />
@@ -133,4 +133,35 @@ function MyApp({ Component, pageProps }: AppProps) {
     )
 }
 
-export default NoSSR(MyApp)
+const LoadOpenTokThenApp = (props: any) => {
+    const [loading, setLoading] = useState(true, 'setLoadingOpenTok')
+
+    useAutoEffect(() => {
+        let imp = async () => {
+            let module = await import('opentok-react')
+            ;({ OTSession, OTPublisher, OTStreams, OTSubscriber, preloadScript } = module)
+        }
+        imp().then(() => {
+            console.log('imported')
+            setLoading(false)
+        })
+    })
+
+    if (loading) {
+        return null
+    }
+    let Component = preloadScript(App)
+    return <Component {...props} />
+}
+
+const DefaultOnSSR = () => <span />
+const NoSSRComponent = ({ children }: { children: ReactElement }) => {
+    return useMountedState() ? children : <DefaultOnSSR />
+}
+const NoSSR = (Component: any) => (props: any) => (
+    <NoSSRComponent>
+        <Component {...props} />
+    </NoSSRComponent>
+)
+
+export default NoSSR(LoadOpenTokThenApp)
