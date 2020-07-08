@@ -16,9 +16,8 @@ import Publish from '~/pages/publish'
 let xPadding = '13px'
 
 export const Stream: FC<{ outbound?: boolean }> = ({ outbound }) => {
-    // let router = useRouter()
-    // let image = (router.query.image as string) ?? 'video.jpg'
     let publishing = useStoreState((state) => state.stream.publishing)
+    let connected = useStoreState((state) => state.stream.connected)
 
     return (
         <Box data-id='Stream' pb='57px' d='flex' flexDir='column' w='100%'>
@@ -42,7 +41,6 @@ export const Stream: FC<{ outbound?: boolean }> = ({ outbound }) => {
                     ) : (
                         <Subscribe properties={{ width: '100%' }} />
                     )}
-                    {/* <Image w='full' src={image} /> */}
                 </Box>
                 <Box px={xPadding}>
                     <Panel outbound={outbound} />
@@ -50,14 +48,13 @@ export const Stream: FC<{ outbound?: boolean }> = ({ outbound }) => {
             </Box>
 
             <Box px={xPadding} flex={1} w='100%' maxW='450px'>
-                <ChatList />
+                {connected && <ChatList />}
             </Box>
             <Box
                 px={xPadding}
                 boxShadow='0px -2px 4px rgba(0, 0, 0, 0.15)'
                 pos='fixed'
                 bg='white'
-                // zIndex={100}
                 bottom='0'
                 w='100%'
                 maxW='450px'
@@ -69,3 +66,8 @@ export const Stream: FC<{ outbound?: boolean }> = ({ outbound }) => {
 }
 
 // boxShadow='inset 0px 3px 4px -2px rgba(0, 0, 0, 0.25)'
+// let router = useRouter()
+// let image = (router.query.image as string) ?? 'video.jpg'
+{
+    /* <Image w='full' src={image} /> */
+}
