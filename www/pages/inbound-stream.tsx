@@ -1,5 +1,5 @@
 import { Stream } from '~/modules/stream/Stream'
 
-export default function Home() {
+export default function InboundStream() {
     return <Stream />
 }

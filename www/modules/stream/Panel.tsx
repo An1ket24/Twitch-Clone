@@ -2,11 +2,15 @@ import { FC } from 'react'
 import { Box, BoxProps, Text, Button, Collapse, Icon } from '@chakra-ui/core'
 import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { useState } from 'reinspect'
+import { useStoreState, useStoreActions } from '~/store/store'
 
 import { font20, font18 } from '~/styles/fonts'
 import { User, Gift } from '~/svg'
 
-export function Panel() {
+export const Panel: FC<{ outbound?: boolean }> = ({ outbound }) => {
+    let publishing = useStoreState((state) => state.stream.publishing)
+    let togglePublishing = useStoreActions((actions) => actions.stream.togglePublishing)
+
     return (
         <Box data-id='Panel' d='flex' alignItems='center' pt='9px' pb='9px'>
             <Box mr='4px'>
@@ -19,12 +23,25 @@ export function Panel() {
                 </Box>
             </Box>
             <Box ml='auto' d='flex' alignItems='center'>
-                <Gift />
-                <Box ml='11px' mr='11px' color='#4B4B4B' {...font18} fontWeight='bold'>
-                    Give a Free Gift
-                </Box>
-                <Button {...font20} fontWeight='bold' color='white' bg='#DF2080' borderRadius='3px' w='72px' h='38px'>
-                    Go!
+                {!outbound && (
+                    <>
+                        <Gift />
+                        <Box ml='11px' mr='11px' color='#4B4B4B' {...font18} fontWeight='bold'>
+                            'Give a Free Gift'
+                        </Box>
+                    </>
+                )}
+                <Button
+                    {...font20}
+                    fontWeight='bold'
+                    color='white'
+                    bg='#DF2080'
+                    borderRadius='3px'
+                    w={outbound ? '180px' : '72px'}
+                    h='38px'
+                    onClick={togglePublishing}
+                >
+                    {outbound ? (publishing ? 'Stop publishing' : 'Publish') : 'Go!'}
                 </Button>
             </Box>
         </Box>

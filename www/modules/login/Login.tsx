@@ -17,7 +17,7 @@ import {
 import { Password } from './Password'
 
 import { font18 } from '~/styles/fonts'
-import { useStoreActions } from '~/store/hooks'
+import { useStoreActions } from '~/store/store'
 import { useStoreState } from 'easy-peasy'
 
 // const DEV_PASSWORD = '1'
@@ -31,9 +31,9 @@ export const Login = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [value, setValue] = useState('', 'setPasswordValue')
     const [error, setError] = useState('', 'setError')
-    let setAuth = useStoreActions((state) => state.setAuth)
-    let storePassword = useStoreActions((state) => state.storePassword)
-    let PASSWORD = useStoreState((state) => state.PASSWORD)
+    let setAuth = useStoreActions((state) => state.auth.setAuth)
+    let storePassword = useStoreActions((state) => state.auth.storePassword)
+    let PASSWORD = useStoreState((state) => state.auth.PASSWORD)
 
     let handleChange = useAutoCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value)

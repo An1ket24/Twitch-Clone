@@ -36,7 +36,8 @@ const Element: FC<{ index: number }> = ({ index }) => {
     let image = useAutoMemo(images[index % images.length])
 
     return (
-        <Link href={`/stream?image=${image}`}>
+        // <Link href={`/inbound-stream?image=${image}`}>
+        <Link href='/inbound-stream'>
             <a>
                 <Box h='199px' bg='#4F4F4F' pos='relative' overflow='hidden'>
                     <Views p='3px' d='flex' pos='absolute' top='15px' left='15px'>

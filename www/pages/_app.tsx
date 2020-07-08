@@ -16,7 +16,7 @@ import { theme } from '~/styles/theme'
 import { store } from '~/store/store'
 import { Layout } from '~/Layout'
 import { Login } from '~/modules/login/Login'
-import { useStoreState, useStoreActions } from '~/store/hooks'
+import { useStoreState, useStoreActions } from '~/store/store'
 
 export let OTSession: any, OTPublisher: any, OTStreams: any, OTSubscriber: any, preloadScript: any
 
@@ -26,10 +26,10 @@ export let TOKEN =
     'T1==cGFydG5lcl9pZD00NjgyODAzNCZzaWc9MmJkYmY5YmUxMjg4Yzg5MDNjMDA5MWFmNmM2ZmZhOGJiNWY0NzZiNjpzZXNzaW9uX2lkPTFfTVg0ME5qZ3lPREF6Tkg1LU1UVTVOREV4T0RjeE5qVTFOSDVLYTNGWk9GVTVTMmhpVW5WcGR5dFNRVzVNVmtJeVFTdC1mZyZjcmVhdGVfdGltZT0xNTk0MTI1Nzc5Jm5vbmNlPTAuNzAyNDUwMjE2ODQ4NjUyNiZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNTk2NzE3Nzc4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9'
 
 const Auth: FC = ({ children }) => {
-    const isAuth = useStoreState((state) => state.isAuth)
-    let PASSWORD = useStoreState((state) => state.PASSWORD)
-    let setAuth = useStoreActions((state) => state.setAuth)
-    let readStoredPassword = useStoreActions((state) => state.readStoredPassword)
+    const isAuth = useStoreState((state) => state.auth.isAuth)
+    let PASSWORD = useStoreState((state) => state.auth.PASSWORD)
+    let setAuth = useStoreActions((state) => state.auth.setAuth)
+    let readStoredPassword = useStoreActions((state) => state.auth.readStoredPassword)
 
     if (!isAuth) {
         if (readStoredPassword() === PASSWORD) {

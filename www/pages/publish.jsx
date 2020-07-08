@@ -5,7 +5,7 @@ import { useAutoCallback, useAutoMemo, useAutoEffect, useLayoutAutoEffect } from
 import { OTSession, OTPublisher, OTStreams, OTSubscriber, preloadScript } from './_app'
 import { API_KEY, SESSION_ID, TOKEN } from './_app'
 
-export default function Publish() {
+export default function Publish({ properties }) {
     return (
         <OTSession apiKey={API_KEY} sessionId={SESSION_ID} token={TOKEN}>
             <OTPublisher
@@ -13,6 +13,7 @@ export default function Publish() {
                     publishAudio: true,
                     publishVideo: true,
                     videoSource: 'screen',
+                    ...properties,
                 }}
             />
         </OTSession>

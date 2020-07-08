@@ -1,23 +1,29 @@
+import { FC } from 'react'
+import { useState } from 'reinspect'
+import { useToggle } from 'react-use'
 import { Divider, Image, Box, Text, IconButton, Collapse, Icon } from '@chakra-ui/core'
 import { BsChevronLeft } from 'react-icons/bs'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useStoreState, useStoreActions } from '~/store/store'
 
 import { NewMessage } from './NewMessage'
 import { Panel } from './Panel'
 import { ChatList } from './ChatList'
 import Subscribe from '~/pages/subscribe'
+import Publish from '~/pages/publish'
 
 let xPadding = '13px'
 
-export function Stream() {
-    let router = useRouter()
-    let image = (router.query.image as string) ?? 'video.jpg'
+export const Stream: FC<{ outbound?: boolean }> = ({ outbound }) => {
+    // let router = useRouter()
+    // let image = (router.query.image as string) ?? 'video.jpg'
+    let publishing = useStoreState((state) => state.stream.publishing)
 
     return (
         <Box data-id='Stream' pb='57px' d='flex' flexDir='column' w='100%'>
-            <Box pos='fixed' top={0} w='100%' maxW='450px' bg='white ' boxShadow='0px 3px 4px rgba(0, 0, 0, 0.25)'>
-                <Box pos='relative'>
+            <Box pos='fixed' top={0} w='100%' maxW='450px' bg='white' boxShadow='0px 3px 4px rgba(0, 0, 0, 0.25)'>
+                <Box pos='relative' minH='200px' bg='black'>
                     <Link href='/'>
                         <IconButton
                             zIndex={100}
@@ -31,11 +37,15 @@ export function Stream() {
                             color='gray.300'
                         />
                     </Link>
-                    <Subscribe properties={{ width: '100%' }} />
+                    {outbound ? (
+                        publishing && <Publish properties={{ width: '100%' }} />
+                    ) : (
+                        <Subscribe properties={{ width: '100%' }} />
+                    )}
                     {/* <Image w='full' src={image} /> */}
                 </Box>
                 <Box px={xPadding}>
-                    <Panel />
+                    <Panel outbound={outbound} />
                 </Box>
             </Box>
 

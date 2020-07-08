@@ -9,12 +9,14 @@ import format from 'date-fns/format'
 import { font16, font14 } from '~/styles/fonts'
 import { Avatar } from '~/svg'
 
-let Row: FC<{ time: string; user: string; avatarColor: string; text: string } & BoxProps> = ({
-    time,
-    avatarColor,
-    user,
-    text,
-}) => {
+let Row: FC<
+    {
+        time: string
+        user: string
+        avatarColor: string
+        text: string
+    } & BoxProps
+> = ({ time, avatarColor, user, text }) => {
     return (
         <Box data-id='Row' d='flex' alignItems='flex-start'>
             <Box flex={0}>
