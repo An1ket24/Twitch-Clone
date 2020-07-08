@@ -38,7 +38,7 @@ export default function Publish({ properties }) {
                 properties={{
                     publishAudio: true,
                     publishVideo: true,
-                    videoSource: 'screen',
+                    videoSource: undefined,
                     ...properties,
                 }}
                 eventHandlers={publisherEventHandlers}
