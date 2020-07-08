@@ -3,7 +3,7 @@ import { useState } from 'reinspect'
 import Head from 'next/head'
 import { AppProps } from 'next/app'
 import Router from 'next/router'
-import { ThemeProvider } from '@chakra-ui/core'
+import { ThemeProvider, Box } from '@chakra-ui/core'
 import { StateInspector } from 'reinspect'
 import { CSSReset, Grid, Spinner } from '@chakra-ui/core'
 import { Global } from '@emotion/core'
@@ -20,9 +20,10 @@ import { useStoreState, useStoreActions } from '~/store/hooks'
 
 export let OTSession: any, OTPublisher: any, OTStreams: any, OTSubscriber: any, preloadScript: any
 
-export let API_KEY = process.env.NEXT_PUBLIC_API_KEY
-export let SESSION_ID = process.env.NEXT_PUBLIC_SESSION_ID
-export let TOKEN = process.env.NEXT_PUBLIC_TOKEN
+export let API_KEY = '46828034'
+export let SESSION_ID = '1_MX40NjgyODAzNH5-MTU5NDExODcxNjU1NH5Ka3FZOFU5S2hiUnVpdytSQW5MVkIyQSt-fg'
+export let TOKEN =
+    'T1==cGFydG5lcl9pZD00NjgyODAzNCZzaWc9MmJkYmY5YmUxMjg4Yzg5MDNjMDA5MWFmNmM2ZmZhOGJiNWY0NzZiNjpzZXNzaW9uX2lkPTFfTVg0ME5qZ3lPREF6Tkg1LU1UVTVOREV4T0RjeE5qVTFOSDVLYTNGWk9GVTVTMmhpVW5WcGR5dFNRVzVNVmtJeVFTdC1mZyZjcmVhdGVfdGltZT0xNTk0MTI1Nzc5Jm5vbmNlPTAuNzAyNDUwMjE2ODQ4NjUyNiZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNTk2NzE3Nzc4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9'
 
 const Auth: FC = ({ children }) => {
     const isAuth = useStoreState((state) => state.isAuth)
@@ -123,7 +124,10 @@ function App({ Component, pageProps }: AppProps) {
                         // }}
                         // >*/}
                         {/* <Layout> */}
-                        <Component {...pageProps} />
+
+                        <Box maxW='450px' bg='white'>
+                            <Component {...pageProps} />
+                        </Box>
                         {/* </Layout> */}
                         {/* </div>*/}
                     </Auth>

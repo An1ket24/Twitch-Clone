@@ -15,12 +15,13 @@ export function Stream() {
     let image = (router.query.image as string) ?? 'video.jpg'
 
     return (
-        <Box data-id='Stream' pb='57px' d='flex' flexDir='column' w='100%' maxW='450px' bg='white'>
+        <Box data-id='Stream' pb='57px' d='flex' flexDir='column' w='100%'>
             <Box pos='fixed' top={0} w='100%' maxW='450px' bg='white ' boxShadow='0px 3px 4px rgba(0, 0, 0, 0.25)'>
                 <Box pos='relative'>
                     <Link href='/'>
                         <IconButton
-                            top='20px'
+                            zIndex={100}
+                            top='14px'
                             left='0px'
                             pos='absolute'
                             aria-label='Back to Feed'
