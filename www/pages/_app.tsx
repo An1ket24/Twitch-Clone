@@ -73,7 +73,7 @@ function App({ Component, pageProps }: AppProps) {
     // })
     return (
         <ThemeProvider theme={theme}>
-            <ReactQueryConfigProvider config={{ refetchAllOnWindowFocus: false }}>
+            <ReactQueryConfigProvider config={{ queries: { refetchOnWindowFocus: false } }}>
                 <ReactQueryDevtools initialIsOpen={false} />
                 <CSSReset />
                 <Global
