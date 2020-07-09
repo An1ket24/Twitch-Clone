@@ -44,6 +44,7 @@ const Auth: FC = ({ children }) => {
 
 function App({ Component, pageProps }: AppProps) {
     console.log('App MOUNT')
+    console.log('process.env', process.env)
     // useLayoutEffect(() => {
     // window.scrollTo(0, 1)
     // })
