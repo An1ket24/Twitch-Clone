@@ -10,6 +10,8 @@ import { User, Gift } from '~/svg'
 export const Panel: FC<{ outbound?: boolean }> = ({ outbound }) => {
     let publishing = useStoreState((state) => state.stream.publishing)
     let togglePublishing = useStoreActions((actions) => actions.stream.togglePublishing)
+    let sendGift = useStoreActions((actions) => actions.stream.sendGift)
+    let handleClick = useAutoCallback(() => (outbound ? togglePublishing() : sendGift()))
 
     return (
         <Box data-id='Panel' d='flex' alignItems='center' pt='9px' pb='9px'>
@@ -39,7 +41,7 @@ export const Panel: FC<{ outbound?: boolean }> = ({ outbound }) => {
                     borderRadius='3px'
                     w={outbound ? '180px' : '72px'}
                     h='38px'
-                    onClick={togglePublishing}
+                    onClick={handleClick}
                 >
                     {outbound ? (publishing ? 'Stop publishing' : 'Publish') : 'Go!'}
                 </Button>

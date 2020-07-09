@@ -8,6 +8,7 @@ import { API_KEY, SESSION_ID, TOKEN } from './_app'
 
 export default function Publish({ properties }) {
     let setConnected = useStoreActions((actions) => actions.stream.setConnected)
+    let setGift = useStoreActions((actions) => actions.stream.setGift)
 
     let eventHandlers = useAutoMemo({
         sessionConnected: () => {
@@ -15,6 +16,10 @@ export default function Publish({ properties }) {
         },
         sessionDisconnected: () => {
             console.log('publisher session disconnected')
+        },
+        'signal:gift': (e) => {
+            console.log('gift received: e', e)
+            setGift('')
         },
     })
     let publisherEventHandlers = useAutoMemo({
@@ -33,13 +38,33 @@ export default function Publish({ properties }) {
     })
 
     return (
-        <OTSession apiKey={API_KEY} sessionId={SESSION_ID} token={TOKEN} eventHandlers={eventHandlers}>
+        <OTSession
+            apiKey={API_KEY}
+            sessionId={SESSION_ID}
+            token={TOKEN}
+            eventHandlers={eventHandlers}
+            onConnect={() => {
+                console.log('publisher session connected')
+            }}
+            onError={(err) => {
+                console.log('publisher session error', err)
+            }}
+        >
             <OTPublisher
                 properties={{
                     publishAudio: true,
                     publishVideo: true,
                     videoSource: undefined,
                     ...properties,
+                }}
+                onPublish={() => {
+                    console.log('published')
+                }}
+                onInit={() => {
+                    console.log('publisher initialized')
+                }}
+                onError={(err) => {
+                    console.log('publisher error', err)
                 }}
                 eventHandlers={publisherEventHandlers}
             />
