@@ -12,6 +12,8 @@ import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { StoreProvider } from 'easy-peasy'
 import { useMountedState } from 'react-use'
 import { useQuery } from 'react-query'
+import { ReactQueryConfigProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query-devtools'
 
 import { theme } from '~/styles/theme'
 import { store } from '~/store/store'
@@ -71,52 +73,57 @@ function App({ Component, pageProps }: AppProps) {
     // })
     return (
         <ThemeProvider theme={theme}>
-            <CSSReset />
-            <Global
-                styles={{
-                    '::-webkit-search-cancel-button': {
-                        WebkitAppearance: 'none',
-                    },
-                    body: {
-                        color: 'black',
-                        fontSize: '14px',
-                        lineHeight: '24px',
-                        // display: 'block',
-                        margin: 0,
-                    },
-                    '#__next': {
-                        backgroundColor: '#e5e5e5',
-                        // display: 'block',
-                    },
-                }}
-            />
-            <StoreProvider store={store}>
-                <StateInspector name='App'>
-                    <Head>
-                        {/* <meta charSet='utf-8' name='viewport' content='width=1170' /> */}
-                        <meta
-                            charSet='utf-8'
-                            name='viewport'
-                            content='width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, maximum-scale=1'
-                        />
-                        {/* <script defer async src='https://static.opentok.com/v2/js/opentok.min.js' /> */}
+            <ReactQueryConfigProvider config={{ refetchAllOnWindowFocus: false }}>
+                <ReactQueryDevtools initialIsOpen={false} />
+                <CSSReset />
+                <Global
+                    styles={{
+                        '::-webkit-search-cancel-button': {
+                            WebkitAppearance: 'none',
+                        },
+                        body: {
+                            color: 'black',
+                            fontSize: '14px',
+                            lineHeight: '24px',
+                            // display: 'block',
+                            margin: 0,
+                        },
+                        '#__next': {
+                            backgroundColor: '#e5e5e5',
+                            // display: 'block',
+                        },
+                    }}
+                />
+                <StoreProvider store={store}>
+                    <StateInspector name='App'>
+                        <Head>
+                            {/* <meta charSet='utf-8' name='viewport' content='width=1170' /> */}
+                            <meta
+                                charSet='utf-8'
+                                name='viewport'
+                                content='width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, maximum-scale=1'
+                            />
+                            {/* <script defer async src='https://static.opentok.com/v2/js/opentok.min.js' /> */}
 
-                        <meta name='description' content='WEB-RTC' />
-                        <meta name='apple-mobile-web-app-capable' content='yes' />
-                        <meta name='mobile-web-app-capable' content='yes' />
-                        <meta name='apple-mobile-web-app-status-bar-style' content='black' />
-                        <title>Web RTC</title>
-                        <link href='https://fonts.googleapis.com/css2?family=Roboto&display=swap' rel='stylesheet' />
-                        <link
-                            href='https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap'
-                            rel='stylesheet'
-                        />
-                        <link rel='icon' type='image/x-icon' href='favicon.ico' />
-                    </Head>
+                            <meta name='description' content='WEB-RTC' />
+                            <meta name='apple-mobile-web-app-capable' content='yes' />
+                            <meta name='mobile-web-app-capable' content='yes' />
+                            <meta name='apple-mobile-web-app-status-bar-style' content='black' />
+                            <title>Web RTC</title>
+                            <link
+                                href='https://fonts.googleapis.com/css2?family=Roboto&display=swap'
+                                rel='stylesheet'
+                            />
+                            <link
+                                href='https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap'
+                                rel='stylesheet'
+                            />
+                            <link rel='icon' type='image/x-icon' href='favicon.ico' />
+                        </Head>
 
-                    <Auth>
-                        {/* <div */}
-                        {/*// onClick={() => {
+                        <Auth>
+                            {/* <div */}
+                            {/*// onClick={() => {
                         //     if (screenfull.isEnabled) {
                         //         try {
                         //             screenfull.request()
@@ -135,16 +142,17 @@ function App({ Component, pageProps }: AppProps) {
                         //     }
                         // }}
                         // >*/}
-                        {/* <Layout> */}
+                            {/* <Layout> */}
 
-                        <Box maxW='450px' bg='white'>
-                            <Component {...pageProps} />
-                        </Box>
-                        {/* </Layout> */}
-                        {/* </div>*/}
-                    </Auth>
-                </StateInspector>
-            </StoreProvider>
+                            <Box maxW='450px' bg='white'>
+                                <Component {...pageProps} />
+                            </Box>
+                            {/* </Layout> */}
+                            {/* </div>*/}
+                        </Auth>
+                    </StateInspector>
+                </StoreProvider>
+            </ReactQueryConfigProvider>
         </ThemeProvider>
     )
 }
