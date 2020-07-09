@@ -11,6 +11,7 @@ import screenfull from 'screenfull'
 import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { StoreProvider } from 'easy-peasy'
 import { useMountedState } from 'react-use'
+import { useQuery } from 'react-query'
 
 import { theme } from '~/styles/theme'
 import { store } from '~/store/store'
@@ -42,9 +43,19 @@ const Auth: FC = ({ children }) => {
     return <>{children}</>
 }
 
+import wretch from 'wretch'
+
+const fetch = () => {
+    console.log('fetching')
+    // return wretch(process.env.NODE_ENV === 'production' ? '/' 'http://localhost:3000/api/try')
+    return wretch('/api/try').post().setTimeout(1000).json()
+}
+
 function App({ Component, pageProps }: AppProps) {
     console.log('App MOUNT')
-    console.log('process.env', process.env)
+    console.log('API process.env', process.env)
+    let { data } = useQuery('api', fetch)
+    console.log('data', data)
     // useLayoutEffect(() => {
     // window.scrollTo(0, 1)
     // })
