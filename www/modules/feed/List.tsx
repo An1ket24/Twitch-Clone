@@ -112,7 +112,7 @@ export function List() {
     })
     useAutoEffect(() => {
         if (fetchImageIndex >= len) {
-            setTimeout(() => setFetchImageIndex(0), 2000)
+            setFetchImageIndex(0)
         }
     })
 

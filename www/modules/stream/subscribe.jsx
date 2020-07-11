@@ -84,8 +84,10 @@ export default function Subscribe(props) {
 
     let router = useRouter()
     let sessionId = router.query.sessionId || props.sessionId
-    let { data, isLoading, error } = useQuery(['getSubscriberToken', sessionId], () =>
-        wretch(`/api/session/getToken/subscriber/${sessionId}`).post().json()
+    let { data, isLoading, error } = useQuery(
+        ['getSubscriberToken', sessionId],
+        () => wretch(`/api/session/getToken/subscriber/${sessionId}`).post().json(),
+        { staleTime: 5 * 60 * 1000, refetchOnMount: false }
     )
     if (!data) {
         return null
