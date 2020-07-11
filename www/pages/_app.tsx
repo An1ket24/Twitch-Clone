@@ -7,11 +7,9 @@ import { ThemeProvider, Box } from '@chakra-ui/core'
 import { StateInspector } from 'reinspect'
 import { CSSReset, Grid, Spinner } from '@chakra-ui/core'
 import { Global } from '@emotion/core'
-import screenfull from 'screenfull'
 import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { StoreProvider } from 'easy-peasy'
 import { useMountedState } from 'react-use'
-import { useQuery } from 'react-query'
 import { ReactQueryConfigProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query-devtools'
 
@@ -21,12 +19,7 @@ import { Layout } from '~/Layout'
 import { Login } from '~/modules/login/Login'
 import { useStoreState, useStoreActions } from '~/store/store'
 
-export let OTSession: any, OTPublisher: any, OTStreams: any, OTSubscriber: any, preloadScript: any
-
-export let API_KEY = '46828034'
-export let SESSION_ID = '1_MX40NjgyODAzNH5-MTU5NDExODcxNjU1NH5Ka3FZOFU5S2hiUnVpdytSQW5MVkIyQSt-fg'
-export let TOKEN =
-    'T1==cGFydG5lcl9pZD00NjgyODAzNCZzaWc9MmJkYmY5YmUxMjg4Yzg5MDNjMDA5MWFmNmM2ZmZhOGJiNWY0NzZiNjpzZXNzaW9uX2lkPTFfTVg0ME5qZ3lPREF6Tkg1LU1UVTVOREV4T0RjeE5qVTFOSDVLYTNGWk9GVTVTMmhpVW5WcGR5dFNRVzVNVmtJeVFTdC1mZyZjcmVhdGVfdGltZT0xNTk0MTI1Nzc5Jm5vbmNlPTAuNzAyNDUwMjE2ODQ4NjUyNiZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNTk2NzE3Nzc4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9'
+export let OT: any, OTSession: any, OTPublisher: any, OTStreams: any, OTSubscriber: any
 
 const Auth: FC = ({ children }) => {
     const isAuth = useStoreState((state) => state.auth.isAuth)
@@ -45,36 +38,13 @@ const Auth: FC = ({ children }) => {
     return <>{children}</>
 }
 
-import wretch from 'wretch'
-
-const fetch = () => {
-    console.log('fetching')
-    // return wretch(process.env.NODE_ENV === 'production' ? '/' 'http://localhost:3000/api/try')
-    return wretch('/api/try').post().setTimeout(1000).json()
-}
-
 function App({ Component, pageProps }: AppProps) {
     console.log('App MOUNT')
-    console.log('API process.env', process.env)
-    let { data } = useQuery('api', fetch)
-    console.log('data', data)
-    // useLayoutEffect(() => {
-    // window.scrollTo(0, 1)
-    // })
-    // useAutoEffect(() => {
-    //     onOpen()
-    // })
-    // useAutoEffect(() => {
-    //     let imp = async () => await import('@opentok/client')
-    //     imp().then(() => {
-    //         console.log('imported')
-    //         setLoading(false)
-    //     })
-    // })
+
     return (
         <ThemeProvider theme={theme}>
-            <ReactQueryConfigProvider config={{ queries: { refetchOnWindowFocus: false } }}>
-                <ReactQueryDevtools initialIsOpen={false} />
+            <ReactQueryConfigProvider config={{ queries: { refetchOnWindowFocus: false, cacheTime: 0 } }}>
+                {/* <ReactQueryDevtools initialIsOpen={false} /> */}
                 <CSSReset />
                 <Global
                     styles={{
@@ -122,33 +92,9 @@ function App({ Component, pageProps }: AppProps) {
                         </Head>
 
                         <Auth>
-                            {/* <div */}
-                            {/*// onClick={() => {
-                        //     if (screenfull.isEnabled) {
-                        //         try {
-                        //             screenfull.request()
-                        //         } catch (error) {
-                        //             console.error('fullscreen error')
-                        //         }
-                        //     }
-                        // }}
-                        // onDrag={() => {
-                        //     try {
-                        //         if (screenfull.isEnabled) {
-                        //             screenfull.request()
-                        //         }
-                        //     } catch (error) {
-                        //         console.error('ffullscreen error')
-                        //     }
-                        // }}
-                        // >*/}
-                            {/* <Layout> */}
-
                             <Box maxW='450px' bg='white'>
                                 <Component {...pageProps} />
                             </Box>
-                            {/* </Layout> */}
-                            {/* </div>*/}
                         </Auth>
                     </StateInspector>
                 </StoreProvider>
@@ -157,13 +103,14 @@ function App({ Component, pageProps }: AppProps) {
     )
 }
 
-const LoadOpenTokThenApp = (props: any) => {
+const LoadNoSSR = ({ children }: { children: ReactElement }) => {
     const [loading, setLoading] = useState(true, 'setLoadingOpenTok')
 
     useAutoEffect(() => {
         let imp = async () => {
             let module = await import('opentok-react')
-            ;({ OTSession, OTPublisher, OTStreams, OTSubscriber, preloadScript } = module)
+            ;({ OTSession, OTPublisher, OTStreams, OTSubscriber } = module)
+            OT = await import('@opentok/client')
         }
         imp().then(() => {
             console.log('imported')
@@ -174,18 +121,18 @@ const LoadOpenTokThenApp = (props: any) => {
     if (loading) {
         return null
     }
-    let Component = preloadScript(App)
-    return <Component {...props} />
+    return loading ? <span /> : children
 }
 
-const DefaultOnSSR = () => <span />
 const NoSSRComponent = ({ children }: { children: ReactElement }) => {
-    return useMountedState() ? children : <DefaultOnSSR />
+    return useMountedState() ? children : <span />
 }
 const NoSSR = (Component: any) => (props: any) => (
     <NoSSRComponent>
-        <Component {...props} />
+        <LoadNoSSR>
+            <Component {...props} />
+        </LoadNoSSR>
     </NoSSRComponent>
 )
 
-export default NoSSR(LoadOpenTokThenApp)
+export default NoSSR(App)

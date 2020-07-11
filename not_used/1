@@ -1,0 +1,35 @@
+    // useLayoutEffect(() => {
+    // window.scrollTo(0, 1)
+    // })
+    // useAutoEffect(() => {
+    //     onOpen()
+    // })
+    // useAutoEffect(() => {
+    //     let imp = async () => await import('@opentok/client')
+    //     imp().then(() => {
+    //         console.log('imported')
+    //         setLoading(false)
+    //     })
+    // })
+
+                            {/* <div */}
+                            {/*// onClick={() => {
+                        //     if (screenfull.isEnabled) {
+                        //         try {
+                        //             screenfull.request()
+                        //         } catch (error) {
+                        //             console.error('fullscreen error')
+                        //         }
+                        //     }
+                        // }}
+                        // onDrag={() => {
+                        //     try {
+                        //         if (screenfull.isEnabled) {
+                        //             screenfull.request()
+                        //         }
+                        //     } catch (error) {
+                        //         console.error('ffullscreen error')
+                        //     }
+                        // }}
+                        // >*/}
+                            {/* <Layout> */}

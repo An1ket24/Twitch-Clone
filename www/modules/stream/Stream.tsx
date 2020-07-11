@@ -1,6 +1,6 @@
 import { useEffect, FC } from 'react'
+import { useUnmount } from 'react-use'
 import { useState } from 'reinspect'
-import { useUpdateEffect } from 'react-use'
 import { Divider, Image, Box, Text, IconButton, Collapse, Icon } from '@chakra-ui/core'
 import { BsChevronLeft } from 'react-icons/bs'
 import Link from 'next/link'
@@ -11,21 +11,15 @@ import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { NewMessage } from './NewMessage'
 import { Panel } from './Panel'
 import { ChatList } from './ChatList'
-import Subscribe from '~/pages/subscribe'
-import Publish from '~/pages/publish'
+import Subscribe from '~/modules/stream/subscribe'
+import Publish from '~/modules/stream/publish'
 
 let xPadding = '13px'
 
 export const Stream: FC<{ outbound?: boolean }> = ({ outbound }) => {
-    let publishing = useStoreState((state) => state.stream.publishing)
     let connected = useStoreState((state) => state.stream.connected)
-    let gift = useStoreState((state) => state.stream.gift)
+    let publishing = useStoreState((state) => state.stream.publishing)
 
-    const [anime, setAnime] = useState(false, 'setAnime')
-    useUpdateEffect(() => {
-        setAnime(true)
-        setTimeout(() => setAnime(false), 4000)
-    }, [gift])
     return (
         <Box data-id='Stream' pb='57px' d='flex' flexDir='column' w='100%'>
             <Box pos='fixed' top={0} w='100%' maxW='450px' bg='white' boxShadow='0px 3px 4px rgba(0, 0, 0, 0.25)'>
@@ -43,12 +37,7 @@ export const Stream: FC<{ outbound?: boolean }> = ({ outbound }) => {
                             color='gray.300'
                         />
                     </Link>
-                    {anime && <Image src='fireworks.gif' zIndex={100} pos='absolute' />}
-                    {outbound ? (
-                        publishing && <Publish properties={{ width: '100%' }} />
-                    ) : (
-                        <Subscribe properties={{ width: '100%' }} />
-                    )}
+                    {outbound ? publishing && <Publish /> : <Subscribe />}
                 </Box>
                 <Box px={xPadding}>
                     <Panel outbound={outbound} />

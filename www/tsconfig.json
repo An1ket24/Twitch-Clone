@@ -29,5 +29,5 @@
         }
     },
     "exclude": ["node_modules"],
-    "include": ["next-env.d.ts", "./**/*.ts", "./**/*.tsx", "./**/*.jsx", "./**/*.js"]
+    "include": ["next-env.d.ts", "./**/*.ts", "./**/*.tsx", "./**/*.jsx", "./**/*.js", "pages/api/try.s"]
 }

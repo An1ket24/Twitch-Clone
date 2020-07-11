@@ -1,0 +1,7 @@
+type Session {
+    id: ID! @unique
+}
+
+type Query {
+    allSessions: [Session!]
+}

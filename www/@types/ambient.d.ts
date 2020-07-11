@@ -3,6 +3,9 @@ declare namespace NodeJS {
         NODE_ENV: string
         API_URL: string
         PASSWORD: string
+        OPENTOK_PROJECT_API_KEY: string
+        OPENTOK_PROJECT_SECRET: string
+        FAUNA_DB_SECRET: string
     }
 }
 

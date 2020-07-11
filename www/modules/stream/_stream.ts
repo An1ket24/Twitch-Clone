@@ -1,22 +1,36 @@
 import { Thunk, thunk, action, Action, createStore, StoreProvider, useStore } from 'easy-peasy'
 
-import { subscriberSession } from '~/pages/subscribe'
+import { subscriberSession } from '~/modules/stream/subscribe'
 
 interface StreamModel {
     gift?: object
+    // outbound: boolean
     connected: boolean
     publishing: boolean
     setConnected: Action<StreamModel, boolean>
     togglePublishing: Action<StreamModel>
     setGift: Action<StreamModel, string>
+    // setOutbound: Action<StreamModel, boolean>
+    reset: Action<StreamModel>
     sendGift: Thunk<StreamModel>
+}
+
+let init = {
+    gift: undefined,
+    // outbound: false,
+    connected: false,
+    publishing: false,
 }
 
 export const streamModel = {
     stream: {
-        gift: undefined,
-        connected: false,
-        publishing: false,
+        ...init,
+        reset: action((state) => {
+            Object.assign(state, init)
+        }),
+        // setOutbound: action((state, payload) => {
+        // state.outbound = payload
+        // }),
         setConnected: action((state, payload) => {
             state.connected = payload
         }),
