@@ -7,6 +7,7 @@ import Link from 'next/link'
 import faker from 'faker'
 import wretch from 'wretch'
 import { useMutation, useQuery } from 'react-query'
+import { useStoreState, useStoreActions } from '~/store/store'
 
 import { withDataId } from '~/utils'
 import { font10, font16 } from '~/styles/fonts'
@@ -14,6 +15,7 @@ import { Head } from '~/svg/Head'
 import { Eye } from '~/svg/Eye'
 import { OT } from '~/pages/_app'
 import Subscribe from '~/modules/stream/subscribe'
+import { useMount, useEffectOnce } from 'react-use'
 
 const Container = withDataId('List', font16)
 const Views = withDataId('View', { ...font10, borderRadius: '2px', bg: 'black', color: 'white' })
@@ -34,12 +36,10 @@ let images = [
     'video12.jpg',
 ]
 
-const Element: FC<{
-    index: number
-    sessionId: string
-    fetchImageIndex: number
-    onImageSet: (index: number) => void
-}> = memo(({ index, sessionId, fetchImageIndex, onImageSet }) => {
+const Element = memo((props: { index: number; sessionId: string }) => {
+    let isGetImageIndex = useStoreState((state) => state.feed.isGetImageIndex)
+    let setIsGetImageIndex = useStoreActions((actions) => actions.feed.setIsGetImageIndex)
+
     let nViews = useAutoMemo(() => Math.floor(Math.random() * 1000))
     let title = useAutoMemo(() => faker.lorem.sentence())
     // let image = useAutoMemo(images[index % images.length])
@@ -54,18 +54,16 @@ const Element: FC<{
     //     }
     // })
 
-    const [image, setImage] = useState(undefined, `setImage at index ${index}`)
+    const [image, setImage] = useState(undefined, `setImage at index ${props.index}`)
     let onImage = useAutoCallback((_image) => {
         console.log('HERE IS AN IMAGE')
         setImage(_image)
-        onImageSet(index)
+        setIsGetImageIndex(undefined)
     })
-    console.log('index', index)
-    console.log('fetchImageIndex', fetchImageIndex)
-    console.log('fetchImageIndex === index', fetchImageIndex === index)
+
     return (
         // <Link href={`/inbound-stream?image=${image}`}>
-        <Link href={`/inbound-stream?sessionId=${sessionId}`}>
+        <Link href={`/inbound-stream?sessionId=${props.sessionId}`}>
             <a>
                 <Box h='199px' bg='#4F4F4F' pos='relative' overflow='hidden'>
                     <Views p='3px' d='flex' pos='absolute' top='15px' left='15px'>
@@ -74,7 +72,7 @@ const Element: FC<{
                         </Box>
                         {nViews}
                     </Views>
-                    {fetchImageIndex === index && <Subscribe sessionId={sessionId} onImage={onImage} />}
+                    {isGetImageIndex === props.index && <Subscribe sessionId={props.sessionId} onImage={onImage} />}
                     {image && <Image w='100%' src={`data:image/png;base64,${image}`} />}
                 </Box>
                 <Box d='flex' alignItems='center' mt='11px'>
@@ -105,16 +103,32 @@ export function List() {
     })
 
     // This logic intended to render Element/Subscribe component one at a time
-    const [fetchImageIndex, setFetchImageIndex] = useState(0, 'setFetchImageIndex')
-    let onImageSet = useAutoCallback((_image) => {
-        setTimeout(() => setFetchImageIndex(fetchImageIndex >= len - 1 ? 0 : fetchImageIndex + 1), 2000)
-        setFetchImageIndex(-1)
+    let reset = useStoreActions((actions) => actions.feed.reset)
+    let nextIndex = useStoreActions((actions) => actions.feed.nextIndex)
+    // const [fetchImageIndex, setFetchImageIndex] = useState(0, 'setFetchImageIndex')
+    // const [saveFetchImageIndex, setSaveFetchImageIndex] = useState(0, 'setSaveFetchImageIndex')
+    // let onImageSet = useAutoCallback(() => {
+    //     // setTimeout(() => setFetchImageIndex(fetchImageIndex >= len - 1 ? 0 : fetchImageIndex + 1), 2000)
+    //     setFetchImageIndex(-1) // unmount Subscriber
+    // })
+
+    // Mount next Subscriber in order to read snapshot
+    useMount(() => {
+        reset({ isGetImageIndex: undefined, currentGetImageIndex: 0 })
     })
     useAutoEffect(() => {
-        if (fetchImageIndex >= len) {
-            setFetchImageIndex(0)
+        let intRef = setInterval(() => {
+            nextIndex({ len })
+        }, 2000)
+        return () => {
+            clearInterval(intRef)
         }
     })
+    // useAutoEffect(() => {
+    //     if (fetchImageIndex >= len) {
+    //         setFetchImageIndex(0)
+    //     }
+    // })
 
     return (
         <Container ref={parentRef} w='full' h='full'>
@@ -131,12 +145,7 @@ export function List() {
                             height={`${virtualRow.size}px`}
                             transform={`translateY(${virtualRow.start}px)`}
                         >
-                            <Element
-                                index={virtualRow.index}
-                                sessionId={id}
-                                fetchImageIndex={fetchImageIndex}
-                                onImageSet={onImageSet}
-                            />
+                            <Element index={virtualRow.index} sessionId={id} />
                         </Box>
                     )
                 })}
