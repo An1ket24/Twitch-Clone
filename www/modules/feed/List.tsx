@@ -58,6 +58,8 @@ const Element = memo((props: { index: number; sessionId: string }) => {
     let onImage = useAutoCallback((_image) => {
         console.log('HERE IS AN IMAGE')
         setImage(_image)
+        console.log('image', _image.length)
+        console.log('image', _image)
         setIsGetImageIndex(undefined)
     })
 
@@ -73,7 +75,7 @@ const Element = memo((props: { index: number; sessionId: string }) => {
                         {nViews}
                     </Views>
                     {isGetImageIndex === props.index && <Subscribe sessionId={props.sessionId} onImage={onImage} />}
-                    {image && <Image w='100%' src={`data:image/png;base64,${image}`} />}
+                    {image && <Image h='100%' src={`data:image/png;base64,${image}`} />}
                 </Box>
                 <Box d='flex' alignItems='center' mt='11px'>
                     <Box mr='15px' ml='3px'>
