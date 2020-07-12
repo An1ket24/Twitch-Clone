@@ -116,7 +116,7 @@ export function List() {
 
     // Mount next Subscriber in order to read snapshot
     useMount(() => {
-        reset({ isGetImageIndex: undefined, currentGetImageIndex: 0 })
+        reset({ isGetImageIndex: 0, currentGetImageIndex: 0 })
     })
     useAutoEffect(() => {
         let intRef = setInterval(() => {

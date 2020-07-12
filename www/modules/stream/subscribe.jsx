@@ -51,7 +51,7 @@ function Subscriber(props, context) {
                 properties={{
                     subscribeToAudio: props.onImage ? false : true,
                     subscribeToVideo: true,
-                    width: '100%',
+                    height: '100%',
                 }}
                 onSubscribe={() => {
                     console.log('subscribed')
