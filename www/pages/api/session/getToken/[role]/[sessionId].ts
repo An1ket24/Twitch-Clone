@@ -10,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
         let sessionId = req.query.sessionId as string
         let role = req.query.role as Role
-        let token = opentok.generateToken(sessionId, { role })
+        let token = opentok.generateToken(sessionId, { role, expireTime: new Date().getTime() / 60 + 3600 * 5 })
         return res.status(200).json({ sessionId, apiKey: process.env.OPENTOK_PROJECT_API_KEY, token })
     } catch (error) {
         console.error(error)

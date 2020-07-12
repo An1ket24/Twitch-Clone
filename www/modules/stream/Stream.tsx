@@ -42,9 +42,9 @@ export const Stream = () => {
             d={serviceRender ? 'none' : 'flex'}
             w={serviceRender ? 0 : '100%'}
             h={serviceRender ? 0 : undefined}
-            pos='relative'
+            pos='fixed'
         >
-            <Box pos='absolute' top={0} w='100%' maxW='450px' bg='white' boxShadow='0px 3px 4px rgba(0, 0, 0, 0.25)'>
+            <Box w='100%' maxW='450px' bg='white' boxShadow='0px 3px 4px rgba(0, 0, 0, 0.25)'>
                 <Box pos='relative' h='198px' bg='black'>
                     {!serviceRender && <BackLink />}
                     {outbound ? publishing && <Publish /> : sessionId && <Subscribe />}

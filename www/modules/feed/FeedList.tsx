@@ -36,7 +36,7 @@ let images = [
     'video12.jpg',
 ]
 
-const Element = memo((props: { index: number; sessionId: string }) => {
+const Element = memo((props: { index: number; liveLen: number; sessionId: string }) => {
     let isGetImageIndex = useStoreState((state) => state.feed.isGetImageIndex)
     let storeImage = useStoreState((state) => state.stream.image)
     let setIsGetImageIndex = useStoreActions((actions) => actions.feed.setIsGetImageIndex)
@@ -56,7 +56,7 @@ const Element = memo((props: { index: number; sessionId: string }) => {
     //     }
     // })
 
-    const [image, setImage] = useState('', `setImage at index ${props.index}`)
+    let [image, setImage] = useState('', `setImage at index ${props.index}`)
     // let onImage = useAutoCallback((_image) => {
     //     setImage(_image)
     //     console.log('image', _image.length)
@@ -64,8 +64,10 @@ const Element = memo((props: { index: number; sessionId: string }) => {
 
     console.log('isGetImageIndex', isGetImageIndex)
     console.log('props.index', props.index)
+
+    let isRealStream = props.index < props.liveLen
     useAutoEffect(() => {
-        if (isGetImageIndex === props.index) {
+        if (isRealStream && isGetImageIndex === props.index) {
             if (storeImage) {
                 console.log('HERE IS AN IMAGE')
                 console.log('image', storeImage.length)
@@ -77,6 +79,7 @@ const Element = memo((props: { index: number; sessionId: string }) => {
         }
     })
 
+    image = isRealStream ? image && `data:image/png;base64,${image}` : images[props.index - props.liveLen]
     return (
         // <Link href={`/inbound-stream?image=${image}`}>
         <Link href={`/inbound-stream?sessionId=${props.sessionId}`}>
@@ -89,7 +92,7 @@ const Element = memo((props: { index: number; sessionId: string }) => {
                         {nViews}
                     </Views>
 
-                    {image && <Image h='100%' src={`data:image/png;base64,${image}`} />}
+                    {image && <Image h='full' w={isRealStream ? undefined : 'full'} src={image} />}
                 </Box>
                 <Box d='flex' alignItems='center' mt='11px'>
                     <Box mr='15px' ml='3px'>
@@ -108,11 +111,10 @@ export function List() {
     let { data, isLoading, error } = useQuery('feed', () => wretch('/api/feed/all').post().json(), {
         refetchInterval: 5000,
     })
-    console.log('data', data)
 
-    let len = data?.sessions.length ?? 0
+    let liveLen = data?.sessions.length ?? 0
     const rowVirtualizer = useVirtual({
-        size: len,
+        size: liveLen + images.length,
         parentRef,
         estimateSize: useAutoCallback(() => 280),
         overscan: 5,
@@ -133,8 +135,9 @@ export function List() {
         reset({ isGetImageIndex: 0, currentGetImageIndex: 0 })
     })
     useAutoEffect(() => {
+        console.log('data', data)
         let intRef = setInterval(() => {
-            nextIndex({ len })
+            liveLen && nextIndex({ len: liveLen })
         }, 2000)
         return () => {
             clearInterval(intRef)
@@ -150,7 +153,6 @@ export function List() {
         <Container ref={parentRef} w='full' h='full'>
             <Box h={`${rowVirtualizer.totalSize}px`} width='full' pos='relative'>
                 {rowVirtualizer.virtualItems.map((virtualRow) => {
-                    let id = data?.sessions[virtualRow.index].id
                     return (
                         <Box
                             key={virtualRow.index}
@@ -161,7 +163,11 @@ export function List() {
                             height={`${virtualRow.size}px`}
                             transform={`translateY(${virtualRow.start}px)`}
                         >
-                            <Element index={virtualRow.index} sessionId={id} />
+                            <Element
+                                index={virtualRow.index}
+                                sessionId={data?.sessions?.[virtualRow.index]?.id ?? data?.sessions?.[0]?.id ?? ''}
+                                liveLen={liveLen}
+                            />
                         </Box>
                     )
                 })}
