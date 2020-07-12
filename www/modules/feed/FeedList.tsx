@@ -111,6 +111,7 @@ export function List() {
     let { data, isLoading, error } = useQuery('feed', () => wretch('/api/feed/all').post().json(), {
         refetchInterval: 5000,
     })
+    console.log('data', data)
 
     let liveLen = data?.sessions.length ?? 0
     const rowVirtualizer = useVirtual({
@@ -135,7 +136,6 @@ export function List() {
         reset({ isGetImageIndex: 0, currentGetImageIndex: 0 })
     })
     useAutoEffect(() => {
-        console.log('data', data)
         let intRef = setInterval(() => {
             liveLen && nextIndex({ len: liveLen })
         }, 2000)
