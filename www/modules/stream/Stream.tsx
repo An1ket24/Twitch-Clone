@@ -24,6 +24,7 @@ export const Stream = () => {
 
     let outbound = router.route === '/outbound-stream'
     let inbound = router.route === '/inbound-stream'
+    // Differentiate whether mount only for snapshot or mount as a stream
     let serviceRender = !outbound && !inbound
 
     let sessionId = router.query.sessionId || storeSessionId
@@ -58,7 +59,7 @@ export const Stream = () => {
             {!serviceRender && (
                 <>
                     <Box px={xPadding} flex={1} w='100%' maxW='450px'>
-                        {connected && <ChatList />}
+                        {(inbound || (outbound && connected)) && <ChatList />}
                     </Box>
                     <Box
                         px={xPadding}
@@ -75,11 +76,4 @@ export const Stream = () => {
             )}
         </Box>
     )
-}
-
-// boxShadow='inset 0px 3px 4px -2px rgba(0, 0, 0, 0.25)'
-// let router = useRouter()
-// let image = (router.query.image as string) ?? 'video.jpg'
-{
-    /* <Image w='full' src={image} /> */
 }
