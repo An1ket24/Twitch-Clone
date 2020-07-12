@@ -1,12 +1,13 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { useState } from 'reinspect'
+import { useUpdateEffect, useMount } from 'react-use'
 import { useAutoCallback, useAutoMemo, useAutoEffect, useLayoutAutoEffect } from 'hooks.macro'
 import { useStoreState, useStoreActions } from '~/store/store'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import { useMutation, useQuery } from 'react-query'
 import wretch from 'wretch'
-import { Box } from '@chakra-ui/core'
+import { Image, Box } from '@chakra-ui/core'
 
 import { OTSession, OTPublisher, OTStreams, OTSubscriber, preloadScript } from '../../pages/_app'
 
@@ -14,6 +15,8 @@ export let subscriberSession
 
 function Subscriber(props, context) {
     let setConnected = useStoreActions((actions) => actions.stream.setConnected)
+    let setImage = useStoreActions((actions) => actions.stream.setImage)
+
     useAutoEffect(() => {
         subscriberSession = context.session
     })
@@ -37,7 +40,7 @@ function Subscriber(props, context) {
         },
         videoElementCreated: () => {
             console.log('subscriber videoElementCreated')
-            props.onImage?.(subscriber.current?.getSubscriber()?.getImgData())
+            setImage(subscriber.current?.getSubscriber()?.getImgData())
         },
         videoDisabled: () => {
             console.log('subscriber videoDisabled')
@@ -51,7 +54,7 @@ function Subscriber(props, context) {
                 properties={{
                     subscribeToAudio: props.onImage ? false : true,
                     subscribeToVideo: true,
-                    height: '100%',
+                    // height: '100%',
                 }}
                 onSubscribe={() => {
                     console.log('subscribed')
@@ -72,7 +75,15 @@ Subscriber.contextTypes = {
     streams: PropTypes.arrayOf(PropTypes.object),
 }
 
-export default function Subscribe(props) {
+export default function Subscribe() {
+    let setGift = useStoreActions((actions) => actions.stream.setGift)
+    let gift = useStoreState((state) => state.stream.gift)
+    const [anime, setAnime] = useState(false, 'setAnime')
+    useUpdateEffect(() => {
+        setAnime(true)
+        setTimeout(() => setAnime(false), 4000)
+    }, [gift])
+
     let eventHandlers = useAutoMemo({
         sessionConnected: () => {
             console.log('subscriber session connected')
@@ -80,36 +91,62 @@ export default function Subscribe(props) {
         sessionDisconnected: () => {
             console.log('subscriber session disconnected')
         },
+        'signal:gift': (e) => {
+            console.log('gift received: e', e)
+            setGift('')
+        },
+    })
+
+    useMount(() => {
+        console.log('Subscriber MOUNTED')
     })
 
     let router = useRouter()
-    let sessionId = router.query.sessionId || props.sessionId
+    let storeSessionId = useStoreState((state) => state.stream.sessionId)
+    let sessionId = router.query.sessionId || storeSessionId
+    // console.log('*** Subscriber sessionId', sessionId)
+
     let { data, isLoading, error } = useQuery(
         ['getSubscriberToken', sessionId],
         () => wretch(`/api/session/getToken/subscriber/${sessionId}`).post().json(),
         { staleTime: 5 * 60 * 1000, refetchOnMount: false }
     )
+    // console.log('-----data', data)
+
+    // const [r, setR] = useState(true, 'setR')
+    // useEffect(() => {
+    //     setTimeout(() => setR(true), 1000)
+    //     return () => setR(false)
+    // }, [data])
+
     if (!data) {
         return null
     }
     console.log('subscriber data', data)
 
+    // console.log('### rendering subscriber', r)
+    // if (!r) {
+    //     return null
+    // }
     return (
-        <OTSession
-            apiKey={data.apiKey}
-            sessionId={data.sessionId}
-            token={data.token}
-            eventHandlers={eventHandlers}
-            onConnect={() => {
-                console.log('subscriber session connected')
-            }}
-            onError={(err) => {
-                console.log('subscriber session error', err)
-            }}
-        >
-            <OTStreams>
-                <Subscriber {...props} />
-            </OTStreams>
-        </OTSession>
+        <Box d='flex' justifyContent='center' pos='relative'>
+            {anime && <Image src='fireworks.gif' zIndex={100} pos='absolute' ml='-17px' />}
+            <OTSession
+                apiKey={data.apiKey}
+                sessionId={data.sessionId}
+                token={data.token}
+                eventHandlers={eventHandlers}
+                onConnect={() => {
+                    console.log('subscriber session connected')
+                }}
+                onError={(err) => {
+                    console.log('subscriber session error', err)
+                }}
+            >
+                <OTStreams>
+                    <Subscriber />
+                </OTStreams>
+            </OTSession>
+        </Box>
     )
 }

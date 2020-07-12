@@ -38,7 +38,9 @@ let images = [
 
 const Element = memo((props: { index: number; sessionId: string }) => {
     let isGetImageIndex = useStoreState((state) => state.feed.isGetImageIndex)
+    let storeImage = useStoreState((state) => state.stream.image)
     let setIsGetImageIndex = useStoreActions((actions) => actions.feed.setIsGetImageIndex)
+    let setSessionId = useStoreActions((actions) => actions.stream.setSessionId)
 
     let nViews = useAutoMemo(() => Math.floor(Math.random() * 1000))
     let title = useAutoMemo(() => faker.lorem.sentence())
@@ -54,27 +56,39 @@ const Element = memo((props: { index: number; sessionId: string }) => {
     //     }
     // })
 
-    const [image, setImage] = useState(undefined, `setImage at index ${props.index}`)
-    let onImage = useAutoCallback((_image) => {
-        console.log('HERE IS AN IMAGE')
-        setImage(_image)
-        console.log('image', _image.length)
-        console.log('image', _image)
-        setIsGetImageIndex(undefined)
+    const [image, setImage] = useState('', `setImage at index ${props.index}`)
+    // let onImage = useAutoCallback((_image) => {
+    //     setImage(_image)
+    //     console.log('image', _image.length)
+    // })
+
+    console.log('isGetImageIndex', isGetImageIndex)
+    console.log('props.index', props.index)
+    useAutoEffect(() => {
+        if (isGetImageIndex === props.index) {
+            if (storeImage) {
+                console.log('HERE IS AN IMAGE')
+                console.log('image', storeImage.length)
+                setIsGetImageIndex(undefined)
+                setImage(storeImage)
+            } else {
+                setSessionId(props.sessionId)
+            }
+        }
     })
 
     return (
         // <Link href={`/inbound-stream?image=${image}`}>
         <Link href={`/inbound-stream?sessionId=${props.sessionId}`}>
             <a>
-                <Box h='199px' bg='#4F4F4F' pos='relative' overflow='hidden'>
+                <Box h='198px' bg='#4F4F4F' pos='relative' overflow='hidden' d='flex' justifyContent='center'>
                     <Views p='3px' d='flex' pos='absolute' top='15px' left='15px'>
                         <Box mr='3px'>
                             <Box as={Eye} />
                         </Box>
                         {nViews}
                     </Views>
-                    {isGetImageIndex === props.index && <Subscribe sessionId={props.sessionId} onImage={onImage} />}
+
                     {image && <Image h='100%' src={`data:image/png;base64,${image}`} />}
                 </Box>
                 <Box d='flex' alignItems='center' mt='11px'>

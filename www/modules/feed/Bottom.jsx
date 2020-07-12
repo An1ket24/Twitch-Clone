@@ -1,4 +1,4 @@
-import { List } from './List'
+import { List } from './FeedList'
 import { Avatar, Divider, Box, Text, Button, Collapse, Icon, IconButton } from '@chakra-ui/core'
 import { Tags } from './Tags'
 import Link from 'next/link'

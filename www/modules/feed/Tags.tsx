@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { List } from './List'
+import { List } from './FeedList'
 import { Box, BoxProps, Text, Button, Collapse, Icon } from '@chakra-ui/core'
 import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 

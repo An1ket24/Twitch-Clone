@@ -18,6 +18,7 @@ import { store } from '~/store/store'
 import { Layout } from '~/Layout'
 import { Login } from '~/modules/login/Login'
 import { useStoreState, useStoreActions } from '~/store/store'
+import { Stream } from '~/modules/stream/Stream'
 
 export let OT: any, OTSession: any, OTPublisher: any, OTStreams: any, OTSubscriber: any
 
@@ -93,6 +94,7 @@ function App({ Component, pageProps }: AppProps) {
 
                         <Auth>
                             <Box maxW='450px' bg='white'>
+                                <Stream />
                                 <Component {...pageProps} />
                             </Box>
                         </Auth>

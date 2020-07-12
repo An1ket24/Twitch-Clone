@@ -35,6 +35,7 @@ export default function Publish() {
             setGift('')
         },
     })
+    let publisher = useRef()
     let publisherEventHandlers = useAutoMemo({
         destroyed: () => {
             console.log('publisher destroyed')
@@ -43,6 +44,10 @@ export default function Publish() {
         streamCreated: () => {
             console.log('publisher streamCreated')
             setConnected(true)
+
+            let p = publisher.current.getPublisher()
+            console.log('publisher videoHeight', p.videoHeight())
+            console.log('publisher videoWidth', p.videoWidth())
         },
         streamDestroyed: () => {
             console.log('publisher streamDestroyed')
@@ -50,7 +55,6 @@ export default function Publish() {
         },
     })
 
-    let publisher = useRef()
     let router = useRouter()
 
     let [createResource, { data, isLoading, error }] = useMutation(() =>
@@ -82,14 +86,9 @@ export default function Publish() {
         return null
     }
     console.log('publisher data', data)
-    // if (publisher.current) {
-    //     let c = publisher.current.getPublisher().getImgData()
-    //     console.log('c', c)
-    // }
-    // console.log('data', data)
     return (
-        <>
-            {anime && <Image src='fireworks.gif' zIndex={100} pos='absolute' />}
+        <Box d='flex' justifyContent='center'>
+            {anime && <Image src='fireworks.gif' zIndex={100} pos='absolute' ml='-17px' />}
 
             <OTSession
                 apiKey={data.apiKey}
@@ -109,7 +108,8 @@ export default function Publish() {
                         publishAudio: true,
                         publishVideo: true,
                         videoSource: undefined,
-                        width: '100%',
+                        fitMode: 'cover',
+                        // height: '100%',
                     }}
                     onPublish={() => {
                         console.log('published')
@@ -123,6 +123,6 @@ export default function Publish() {
                     eventHandlers={publisherEventHandlers}
                 />
             </OTSession>
-        </>
+        </Box>
     )
 }

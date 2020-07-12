@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react'
-import { List } from './List'
+import { List } from './FeedList'
 import { Divider, Box, Text, Button, Collapse, Icon } from '@chakra-ui/core'
 import { Tags } from './Tags'
 import { Top } from './Top'
