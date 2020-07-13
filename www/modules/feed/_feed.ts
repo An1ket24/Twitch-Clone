@@ -78,6 +78,8 @@ export const feedModel: FeedModel = {
             let currentIndex = getState().currentIndex < feedLen - 1 ? getState().currentIndex + 1 : 0
             actions.setCurrentIndex(currentIndex)
             if (getStoreState().stream.sessionId === feed.sessions[currentIndex].id) {
+                console.log('getStoreState().stream.status', getStoreState().stream.status)
+                console.log('nextIndex getStoreActions().stream.setSessionId(undefined)')
                 getStoreActions().stream.setSessionId(undefined)
             } else {
                 getStoreActions().stream.setSessionId(feed.sessions[currentIndex].id)

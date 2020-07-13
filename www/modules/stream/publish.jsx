@@ -112,6 +112,7 @@ export default function Publish() {
                 zIndex={100}
                 pos='absolute'
                 h='100%'
+                w='100%'
                 // ml='-17px'
             />
 
@@ -133,7 +134,7 @@ export default function Publish() {
                         publishAudio: true,
                         publishVideo: true,
                         videoSource: undefined,
-                        fitMode: 'cover',
+                        fitMode: 'contain',
                         name: getDeviceString(),
                         // height: '100%',
                     }}

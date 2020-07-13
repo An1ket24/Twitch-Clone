@@ -47,26 +47,26 @@ function Subscriber(props, context) {
     })
 
     return (
-        <Box d={props.serviceRender ? 'none' : 'block'}>
-            <OTSubscriber
-                ref={subscriber}
-                properties={{
-                    subscribeToAudio: props.serviceRender ? false : true,
-                    subscribeToVideo: true,
-                    // height: '100%',
-                }}
-                onSubscribe={() => {
-                    console.log('subscribed')
-                }}
-                onError={(err) => {
-                    console.log('subscriber error', err)
-                }}
-                eventHandlers={subscribeEventHandlers}
-                retry
-                maxRetryAttempts={3}
-                retryAttemptTimeout={2000}
-            />
-        </Box>
+        <OTSubscriber
+            ref={subscriber}
+            properties={{
+                subscribeToAudio: props.serviceRender ? false : true,
+                subscribeToVideo: true,
+                fitMode: 'contain',
+                // height: '100%',
+                // width: '100%',
+            }}
+            onSubscribe={() => {
+                console.log('subscribed')
+            }}
+            onError={(err) => {
+                console.log('subscriber error', err)
+            }}
+            eventHandlers={subscribeEventHandlers}
+            retry
+            maxRetryAttempts={3}
+            retryAttemptTimeout={2000}
+        />
     )
 }
 Subscriber.contextTypes = {
@@ -138,7 +138,7 @@ export default function Subscribe(props) {
     //     return null
     // }
     return (
-        <Box d='flex' justifyContent='center' pos='relative'>
+        <Box d={props.serviceRender ? 'none' : 'flex'} justifyContent='center' pos='relative'>
             <Image
                 transition='opacity 0.6s'
                 opacity={anime ? 1 : 0}
