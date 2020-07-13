@@ -104,7 +104,7 @@ export default function Publish() {
     }
     console.log('publisher data', data)
     return (
-        <Box d='flex' justifyContent='center'>
+        <Box d='flex' justifyContent='center' pos='relative'>
             {anime && (
                 <Image
                     src='fireworks1.gif'
