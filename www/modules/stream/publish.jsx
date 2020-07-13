@@ -105,15 +105,15 @@ export default function Publish() {
     console.log('publisher data', data)
     return (
         <Box d='flex' justifyContent='center' pos='relative'>
-            {anime && (
-                <Image
-                    src='fireworks1.gif'
-                    zIndex={100}
-                    pos='absolute'
-                    h='100%'
-                    // ml='-17px'
-                />
-            )}
+            <Image
+                transition='opacity 0.6s'
+                opacity={anime ? 1 : 0}
+                src='fireworks1.gif'
+                zIndex={100}
+                pos='absolute'
+                h='100%'
+                // ml='-17px'
+            />
 
             <OTSession
                 apiKey={data.apiKey}
