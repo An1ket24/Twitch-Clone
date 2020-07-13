@@ -53,7 +53,7 @@ export const Stream = () => {
             <Box w='100%' maxW='450px' bg='white' boxShadow='0px 3px 4px rgba(0, 0, 0, 0.25)'>
                 <Box pos='relative' h='198px' bg='black'>
                     {!serviceRender && <BackLink />}
-                    {outbound ? publishing && <Publish /> : sessionId && <Subscribe />}
+                    {outbound ? publishing && <Publish /> : sessionId && <Subscribe serviceRender={serviceRender} />}
                 </Box>
                 {!serviceRender && (
                     <Box px={xPadding}>

@@ -47,11 +47,11 @@ function Subscriber(props, context) {
     })
 
     return (
-        <Box d={props.onImage ? 'none' : 'block'}>
+        <Box d={props.serviceRender ? 'none' : 'block'}>
             <OTSubscriber
                 ref={subscriber}
                 properties={{
-                    subscribeToAudio: props.onImage ? false : true,
+                    subscribeToAudio: props.serviceRender ? false : true,
                     subscribeToVideo: true,
                     // height: '100%',
                 }}
@@ -74,7 +74,7 @@ Subscriber.contextTypes = {
     streams: PropTypes.arrayOf(PropTypes.object),
 }
 
-export default function Subscribe() {
+export default function Subscribe(props) {
     let setGift = useStoreActions((actions) => actions.stream.setGift)
     let gift = useStoreState((state) => state.stream.gift)
     const [anime, setAnime] = useState(false, 'setAnime')
@@ -161,7 +161,7 @@ export default function Subscribe() {
                 }}
             >
                 <OTStreams>
-                    <Subscriber />
+                    <Subscriber {...props} />
                 </OTStreams>
             </OTSession>
         </Box>
