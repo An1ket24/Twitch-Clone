@@ -21,7 +21,6 @@ export const Stream = () => {
     let sessionId = useStoreState((state) => state.stream.sessionId)
     let publishing = useStoreState((state) => state.stream.publishing)
     let router = useRouter()
-    let reset = useStoreActions((actions) => actions.stream.reset)
     let setSessionId = useStoreActions((actions) => actions.stream.setSessionId)
 
     let outbound = router.route === '/outbound-stream'
@@ -38,7 +37,7 @@ export const Stream = () => {
             setSessionId(router.query.sessionId as string)
         }
     })
-    console.log('Stream')
+    console.log('*** Stream sessionId', sessionId)
 
     return (
         <Box
@@ -66,7 +65,7 @@ export const Stream = () => {
             {!serviceRender && (
                 <>
                     <Box px={xPadding} flex={1} w='100%' maxW='450px'>
-                        {(inbound || (outbound && status === Status.STREAMING)) && <ChatList />}
+                        <ChatList />
                     </Box>
                     <Box
                         px={xPadding}

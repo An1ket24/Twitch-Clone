@@ -45,10 +45,8 @@ let init = {
 type Listeners = {
     onSessionId: ThunkOn<StreamModel>
     onStream: ThunkOn<StreamModel>
-    onStatus: ThunkOn<StreamModel>
+    // onStatus: ThunkOn<StreamModel>
 }
-
-let intRef: any
 
 let listeners: Listeners = {
     onSessionId: thunkOn(
@@ -59,25 +57,36 @@ let listeners: Listeners = {
         (actions) => actions.setStream,
         (actions) => actions.setStatus(Status.STREAMING)
     ),
-    onStatus: thunkOn(
-        (actions) => actions.setStatus,
-        (actions, target, { getState }) => {
-            if (target.payload === Status.CONNECTING && getState().sessionId && !intRef) {
-                intRef = setInterval(() => {
-                    if (getState().status === Status.CONNECTING) {
-                        let { sessionId } = getState()
-                        actions.setSessionId(undefined)
-                        setTimeout(() => {
-                            actions.setSessionId(sessionId)
-                        }, 300)
-                    } else {
-                        clearInterval(intRef)
-                        intRef = undefined
-                    }
-                }, 8000)
-            }
-        }
-    ),
+    // onStatus: thunkOn(
+    //     (actions) => actions.setStatus,
+    //     (actions, target, { getState }) => {
+    //         console.log('1')
+    //         if (intRef && target.payload !== Status.CONNECTING) {
+    //             console.log('1.5')
+    //             clearInterval(intRef)
+    //             intRef = undefined
+    //         }
+    //         if (!intRef && target.payload === Status.CONNECTING && getState().sessionId) {
+    //             console.log('2')
+    //             intRef = setInterval(() => {
+    //                 console.log('3')
+    //                 if (getState().status === Status.CONNECTING) {
+    //                     console.log('4')
+    //                     let { sessionId } = getState()
+    //                     actions.setSessionId(undefined)
+    //                     console.log('*** setSessionId(undefined)')
+    //                     setTimeout(() => {
+    //                         actions.setSessionId(sessionId)
+    //                     }, 500)
+    //                 } else {
+    //                     console.log('5')
+    //                     clearInterval(intRef)
+    //                     intRef = undefined
+    //                 }
+    //             }, 8000)
+    //         }
+    //     }
+    // ),
 }
 
 export type StreamModel = Init &

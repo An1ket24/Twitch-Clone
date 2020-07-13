@@ -18,6 +18,7 @@ export type FeedModel = typeof init & {
 }
 
 let streamStartTime = 0
+let intRef: any
 
 export const feedModel: FeedModel = {
     ...init,
@@ -26,11 +27,38 @@ export const feedModel: FeedModel = {
     }),
     onStreamStatus: thunkOn(
         (actions, storeActions) => storeActions.stream.setStatus,
-        (actions, target, { getState, getStoreState }) => {
+        (actions, target, { getState, getStoreState, getStoreActions }) => {
+            console.log('target.payload', target.payload)
             if (target.payload === Status.STREAMING) {
                 streamStartTime = new Date().getTime()
                 getState().streams.set(getStoreState().stream.sessionId, getStoreState().stream.stream)
                 // actions.nextIndex()
+            }
+
+            console.log('1')
+            if (intRef && target.payload !== Status.CONNECTING) {
+                console.log('1.5')
+                clearInterval(intRef)
+                intRef = undefined
+            }
+            if (!intRef && target.payload === Status.CONNECTING && getStoreState().stream.sessionId) {
+                console.log('2')
+                intRef = setInterval(() => {
+                    console.log('3')
+                    if (getStoreState().stream.status === Status.CONNECTING) {
+                        console.log('4')
+                        let { sessionId } = getStoreState().stream
+                        getStoreActions().stream.setSessionId(undefined)
+                        console.log('*** setSessionId(undefined)')
+                        setTimeout(() => {
+                            getStoreActions().stream.setSessionId(sessionId)
+                        }, 500)
+                    } else {
+                        console.log('5')
+                        clearInterval(intRef)
+                        intRef = undefined
+                    }
+                }, 8000)
             }
         }
     ),
@@ -44,12 +72,16 @@ export const feedModel: FeedModel = {
         if (
             feed &&
             feedLen &&
-            getStoreState().stream.status !== Status.CONNECTING &&
+            (getStoreState().stream.status !== Status.CONNECTING || !getStoreState().stream.sessionId) &&
             new Date().getTime() - streamStartTime > 1500
         ) {
             let currentIndex = getState().currentIndex < feedLen - 1 ? getState().currentIndex + 1 : 0
             actions.setCurrentIndex(currentIndex)
-            getStoreActions().stream.setSessionId(feed.sessions[currentIndex].id)
+            if (getStoreState().stream.sessionId === feed.sessions[currentIndex].id) {
+                getStoreActions().stream.setSessionId(undefined)
+            } else {
+                getStoreActions().stream.setSessionId(feed.sessions[currentIndex].id)
+            }
         }
     }),
     setCurrentIndex: action((state, payload) => {

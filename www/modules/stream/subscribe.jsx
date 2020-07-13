@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import { useState } from 'reinspect'
-import { useUpdateEffect, useMount } from 'react-use'
+import { useUnmount, useUpdateEffect, useMount } from 'react-use'
 import { useAutoCallback, useAutoMemo, useAutoEffect, useLayoutAutoEffect } from 'hooks.macro'
 import { useStoreState, useStoreActions } from '~/store/store'
 import PropTypes from 'prop-types'
@@ -15,9 +15,7 @@ import { Status } from '~/modules/stream/_stream'
 export let subscriberSession
 
 function Subscriber(props, context) {
-    let setConnected = useStoreActions((actions) => actions.stream.setConnected)
     let setStream = useStoreActions((actions) => actions.stream.setStream)
-    let setStatus = useStoreActions((actions) => actions.stream.setStatus)
     let subscriber = useRef()
 
     let subscribeEventHandlers = useAutoMemo({
@@ -61,7 +59,7 @@ function Subscriber(props, context) {
                     console.log('subscribed')
                 }}
                 onError={(err) => {
-                    console.log('publisher error', err)
+                    console.log('subscriber error', err)
                 }}
                 eventHandlers={subscribeEventHandlers}
                 retry
@@ -84,6 +82,20 @@ export default function Subscribe() {
         setAnime(true)
         setTimeout(() => setAnime(false), 4000)
     }, [gift])
+    let resetStreamStore = useStoreActions((actions) => actions.stream.reset)
+    useUnmount(() => {
+        console.log('*** Subscriber UNMOUNTED')
+        resetStreamStore()
+    })
+    useMount(() => {
+        console.log('*** Subscriber MOUNTED')
+    })
+    useAutoEffect(() => {
+        console.log('*** Subscriber useAutoEffect')
+    })
+    useEffect(() => {
+        console.log('*** Subscriber useEffect')
+    }, [])
 
     let eventHandlers = useAutoMemo({
         sessionConnected: () => {
@@ -96,10 +108,6 @@ export default function Subscribe() {
             console.log('gift received: e', e)
             setGift('')
         },
-    })
-
-    useMount(() => {
-        console.log('Subscriber MOUNTED')
     })
 
     // let router = useRouter()

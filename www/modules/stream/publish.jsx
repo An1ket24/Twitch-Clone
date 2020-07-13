@@ -30,6 +30,14 @@ export default function Publish() {
         setAnime(true)
         setTimeout(() => setAnime(false), 4000)
     }, [gift])
+    let resetStreamStore = useStoreActions((actions) => actions.stream.reset)
+    useUnmount(() => {
+        console.log('Publisher UNMOUNTED')
+        resetStreamStore()
+    })
+    useMount(() => {
+        console.log('Publisher MOUNTED')
+    })
 
     let eventHandlers = useAutoMemo({
         sessionConnected: () => {
