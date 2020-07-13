@@ -110,6 +110,7 @@ export default function Publish() {
                     src='fireworks1.gif'
                     zIndex={100}
                     pos='absolute'
+                    h='100%'
                     // ml='-17px'
                 />
             )}
