@@ -12,25 +12,32 @@ import { ChatList } from './ChatList'
 import Subscribe from '~/modules/stream/subscribe'
 import Publish from '~/modules/stream/publish'
 import { BackLink } from '~/modules/stream/BackLink'
+import { Status } from '~/modules/stream/_stream'
 
 let xPadding = '13px'
 
 export const Stream = () => {
-    let connected = useStoreState((state) => state.stream.connected)
-    let storeSessionId = useStoreState((state) => state.stream.sessionId)
+    let status = useStoreState((state) => state.stream.status)
+    let sessionId = useStoreState((state) => state.stream.sessionId)
     let publishing = useStoreState((state) => state.stream.publishing)
     let router = useRouter()
     let reset = useStoreActions((actions) => actions.stream.reset)
+    let setSessionId = useStoreActions((actions) => actions.stream.setSessionId)
 
     let outbound = router.route === '/outbound-stream'
     let inbound = router.route === '/inbound-stream'
     // Differentiate whether mount only for snapshot or mount as a stream
     let serviceRender = !outbound && !inbound
 
-    let sessionId = router.query.sessionId || storeSessionId
-    useUpdateEffect(() => {
-        return () => reset()
-    }, [reset, sessionId])
+    // let sessionId = router.query.sessionId || storeSessionId
+    // useUpdateEffect(() => {
+    //     return () => reset()
+    // }, [reset, sessionId])
+    useAutoEffect(() => {
+        if (router.query.sessionId) {
+            setSessionId(router.query.sessionId as string)
+        }
+    })
     console.log('Stream')
 
     return (
@@ -59,7 +66,7 @@ export const Stream = () => {
             {!serviceRender && (
                 <>
                     <Box px={xPadding} flex={1} w='100%' maxW='450px'>
-                        {(inbound || (outbound && connected)) && <ChatList />}
+                        {(inbound || (outbound && status === Status.STREAMING)) && <ChatList />}
                     </Box>
                     <Box
                         px={xPadding}

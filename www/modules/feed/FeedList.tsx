@@ -8,14 +8,14 @@ import faker from 'faker'
 import wretch from 'wretch'
 import { useMutation, useQuery } from 'react-query'
 import { useStoreState, useStoreActions } from '~/store/store'
+import { useUnmount, useMount, useEffectOnce } from 'react-use'
 
 import { withDataId } from '~/utils'
 import { font10, font16 } from '~/styles/fonts'
 import { Head } from '~/svg/Head'
 import { Eye } from '~/svg/Eye'
-import { OT } from '~/pages/_app'
-import Subscribe from '~/modules/stream/subscribe'
-import { useMount, useEffectOnce } from 'react-use'
+import { ApiFeedAllResult } from '~/pages/api/feed/all'
+// import { OT } from '~/pages/_app'
 
 const Container = withDataId('List', font16)
 const Views = withDataId('View', { ...font10, borderRadius: '2px', bg: 'black', color: 'white' })
@@ -36,14 +36,14 @@ let images = [
     'video12.jpg',
 ]
 
-const Element = memo((props: { index: number; liveLen: number; sessionId: string }) => {
-    let isGetImageIndex = useStoreState((state) => state.feed.isGetImageIndex)
-    let storeImage = useStoreState((state) => state.stream.image)
-    let setIsGetImageIndex = useStoreActions((actions) => actions.feed.setIsGetImageIndex)
-    let setSessionId = useStoreActions((actions) => actions.stream.setSessionId)
+// const Element = memo((props: { index: number; liveLen: number; sessionId: string }) => {
+const Element = memo((props: { index: number; sessionId?: string }) => {
+    // let isGetImageIndex = useStoreState((state) => state.feed.isGetImageIndex)
+    // let storeImage = useStoreState((state) => state.stream.image)
+    // let setIsGetImageIndex = useStoreActions((actions) => actions.feed.setIsGetImageIndex)
+    // let setSessionId = useStoreActions((actions) => actions.stream.setSessionId)
 
-    let nViews = useAutoMemo(() => Math.floor(Math.random() * 1000))
-    let title = useAutoMemo(() => faker.lorem.sentence())
+    // let title = useAutoMemo(() => faker.lorem.sentence())
     // let image = useAutoMemo(images[index % images.length])
     // let { data, isLoading, error } = useQuery('getSubscriberToken', () =>
     //     wretch(`/api/session/getSubscriberToken/${sessionId}`).post().json()
@@ -56,30 +56,54 @@ const Element = memo((props: { index: number; liveLen: number; sessionId: string
     //     }
     // })
 
-    let [image, setImage] = useState('', `setImage at index ${props.index}`)
+    // let [image, setImage] = useState('', `setImage at index ${props.index}`)
     // let onImage = useAutoCallback((_image) => {
     //     setImage(_image)
     //     console.log('image', _image.length)
     // })
 
-    console.log('isGetImageIndex', isGetImageIndex)
-    console.log('props.index', props.index)
+    // console.log('isGetImageIndex', isGetImageIndex)
+    // console.log('props.index', props.index)
 
-    let isRealStream = props.index < props.liveLen
-    useAutoEffect(() => {
-        if (isRealStream && isGetImageIndex === props.index) {
-            if (storeImage) {
-                console.log('HERE IS AN IMAGE')
-                console.log('image', storeImage.length)
-                setIsGetImageIndex(undefined)
-                setImage(storeImage)
-            } else {
-                setSessionId(props.sessionId)
-            }
-        }
-    })
+    // let isRealStream = props.index < props.liveLen
+    // useAutoEffect(() => {
+    //     if (isRealStream && isGetImageIndex === props.index) {
+    //         setSessionId(props.sessionId)
+    //     }
+    // })
+    // useAutoEffect(() => {
+    //     if (isRealStream && isGetImageIndex === props.index) {
+    //         if (storeImage) {
+    //             console.log('HERE IS AN IMAGE')
+    //             console.log('image', storeImage.length)
+    //             setIsGetImageIndex(undefined)
+    //             setImage(storeImage)
+    //         } else {
+    //             setSessionId(props.sessionId)
+    //         }
+    //     }
+    // })
+    // useAutoEffect(() => {
+    //     if (isRealStream && isGetImageIndex === props.index) {
+    //         if (storeImage) {
+    //             console.log('HERE IS AN IMAGE')
+    //             console.log('image', storeImage.length)
+    //             setIsGetImageIndex(undefined)
+    //             setImage(storeImage)
+    //         } else {
+    //             setSessionId(props.sessionId)
+    //         }
+    //     }
+    // })
 
-    image = isRealStream ? image && `data:image/png;base64,${image}` : images[props.index - props.liveLen]
+    let stream = useStoreState((state) => state.feed.getStream(props.sessionId))
+    let nViews = useAutoMemo(() => Math.floor(Math.random() * 1000))
+
+    let image = stream?.image ? `data:image/png;base64,${stream?.image}` : images[props.index]
+    let title = useAutoMemo(() => faker.lorem.sentence())
+    title = stream?.name ?? title
+    // image = isRealStream ? image && `data:image/png;base64,${image}` : images[props.index - props.liveLen]
+
     return (
         // <Link href={`/inbound-stream?image=${image}`}>
         <Link href={`/inbound-stream?sessionId=${props.sessionId}`}>
@@ -92,13 +116,14 @@ const Element = memo((props: { index: number; liveLen: number; sessionId: string
                         {nViews}
                     </Views>
 
-                    {image && <Image h='full' w={isRealStream ? undefined : 'full'} src={image} />}
+                    {image && <Image h='full' w={(!stream && 'full') || undefined} src={image} />}
                 </Box>
                 <Box d='flex' alignItems='center' mt='11px'>
                     <Box mr='15px' ml='3px'>
                         <Box as={Head} />
                     </Box>
                     {title}
+                    {/* {isRealStream ? streamName : title} */}
                 </Box>
             </a>
         </Link>
@@ -108,10 +133,19 @@ const Element = memo((props: { index: number; liveLen: number; sessionId: string
 export function List() {
     const parentRef = useRef()
 
-    let { data, isLoading, error } = useQuery('feed', () => wretch('/api/feed/all').post().json(), {
-        refetchInterval: 5000,
-    })
+    let { data, isLoading, error } = useQuery<ApiFeedAllResult, string>(
+        'feed',
+        () => wretch('/api/feed/all').post().json(),
+        {
+            refetchInterval: 1000,
+        }
+    )
+
     console.log('data', data)
+
+    if (data) {
+        data.sessions = data.sessions.sort((a, b) => (a.id < b.id ? 1 : -1))
+    }
 
     let liveLen = data?.sessions.length ?? 0
     const rowVirtualizer = useVirtual({
@@ -132,13 +166,11 @@ export function List() {
     // })
 
     // Mount next Subscriber in order to read snapshot
-    useMount(() => {
-        reset({ isGetImageIndex: 0, currentGetImageIndex: 0 })
-    })
+    // useUnmount(() => {
+    // reset()
+    // })
     useAutoEffect(() => {
-        let intRef = setInterval(() => {
-            liveLen && nextIndex({ len: liveLen })
-        }, 2000)
+        let intRef = setInterval(() => nextIndex(), 500)
         return () => {
             clearInterval(intRef)
         }
@@ -165,8 +197,8 @@ export function List() {
                         >
                             <Element
                                 index={virtualRow.index}
-                                sessionId={data?.sessions?.[virtualRow.index]?.id ?? data?.sessions?.[0]?.id ?? ''}
-                                liveLen={liveLen}
+                                sessionId={data?.sessions?.[virtualRow.index]?.id ?? data?.sessions?.[0]?.id}
+                                // liveLen={liveLen}
                             />
                         </Box>
                     )

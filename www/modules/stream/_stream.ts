@@ -1,84 +1,138 @@
-import { Thunk, thunk, action, Action, createStore, StoreProvider, useStore } from 'easy-peasy'
+import {
+    ThunkOn,
+    thunkOn,
+    ActionOn,
+    actionOn,
+    Thunk,
+    thunk,
+    action,
+    Action,
+    createStore,
+    StoreProvider,
+    useStore,
+} from 'easy-peasy'
 
 import { subscriberSession } from '~/modules/stream/subscribe'
 
-type Init = {
-    gift?: object
-    // outbound: boolean
-    serviceRender: boolean
-    connected: boolean
-    publishing: boolean
-    sessionId: string
+export type Stream = {
+    name: string
     image: string
 }
+export enum Status {
+    IDLE = 'IDLE',
+    CONNECTING = 'CONNECTING',
+    STREAMING = 'STREAMING',
+}
 
-interface StreamModel extends Init {
-    setConnected: Action<StreamModel, boolean>
-    setServiceRender: Action<StreamModel, boolean>
-    togglePublishing: Action<StreamModel>
-    setGift: Action<StreamModel, string>
-    // setOutbound: Action<StreamModel, boolean>
-    setSessionId: Action<StreamModel, string>
-    setImage: Action<StreamModel, string>
-    reset: Action<StreamModel>
-    sendGift: Thunk<StreamModel>
+type Init = {
+    gift?: object
+    serviceRender: boolean
+    publishing: boolean
+    sessionId: string | undefined
+    status: Status
+    stream: Stream | undefined
 }
 
 let init = {
     gift: undefined,
-    // outbound: false,
-    connected: false,
     publishing: false,
-
-    image: '',
     serviceRender: true,
+    status: Status.IDLE,
+    stream: undefined,
+    sessionId: undefined,
 }
 
-export const streamModel = {
-    stream: {
-        ...init,
-        sessionId: '',
-        reset: action((state) => {
-            Object.assign(state, init)
-        }),
-        // setOutbound: action((state, payload) => {
-        // state.outbound = payload
-        // }),
-        setImage: action((state, payload) => {
-            state.image = payload
-        }),
-        setSessionId: action((state, payload) => {
-            state.sessionId = payload
-        }),
-        setConnected: action((state, payload) => {
-            state.connected = payload
-        }),
-        setServiceRender: action((state, payload) => {
-            state.serviceRender = payload
-        }),
-        setGift: action((state, payload) => {
-            state.gift = {}
-        }),
-        togglePublishing: action((state) => {
-            state.publishing = !state.publishing
-        }),
-        sendGift: thunk(() => {
-            if (!subscriberSession) {
-                return
-            }
-            subscriberSession.signal(
-                {
-                    type: 'gift',
-                    data: '',
-                },
-                function (err: any) {
-                    if (err) {
-                        console.log('signal error: ' + err.message)
+type Listeners = {
+    onSessionId: ThunkOn<StreamModel>
+    onStream: ThunkOn<StreamModel>
+    onStatus: ThunkOn<StreamModel>
+}
+
+let intRef: any
+
+let listeners: Listeners = {
+    onSessionId: thunkOn(
+        (actions) => actions.setSessionId,
+        (actions) => actions.setStatus(Status.CONNECTING)
+    ),
+    onStream: thunkOn(
+        (actions) => actions.setStream,
+        (actions) => actions.setStatus(Status.STREAMING)
+    ),
+    onStatus: thunkOn(
+        (actions) => actions.setStatus,
+        (actions, target, { getState }) => {
+            if (target.payload === Status.CONNECTING && getState().sessionId && !intRef) {
+                intRef = setInterval(() => {
+                    if (getState().status === Status.CONNECTING) {
+                        let { sessionId } = getState()
+                        actions.setSessionId(undefined)
+                        setTimeout(() => {
+                            actions.setSessionId(sessionId)
+                        }, 300)
                     } else {
-                        console.log('signal sent')
+                        clearInterval(intRef)
+                        intRef = undefined
                     }
+                }, 8000)
+            }
+        }
+    ),
+}
+
+export type StreamModel = Init &
+    Listeners & {
+        setServiceRender: Action<StreamModel, boolean>
+        togglePublishing: Action<StreamModel>
+        setGift: Action<StreamModel, string>
+        setSessionId: Action<StreamModel, string | undefined>
+        setStream: Action<StreamModel, Stream>
+        setStatus: Action<StreamModel, Status>
+        reset: Action<StreamModel>
+        sendGift: Thunk<StreamModel>
+    }
+
+export const streamModel: StreamModel = {
+    ...init,
+    sessionId: '',
+    reset: action((state) => {
+        Object.assign(state, init)
+    }),
+    ...listeners,
+    setSessionId: action((state, payload) => {
+        state.sessionId = payload
+    }),
+    setStream: action((state, stream) => {
+        state.stream = stream
+    }),
+    setStatus: action((state, status) => {
+        state.status = status
+    }),
+    setServiceRender: action((state, payload) => {
+        state.serviceRender = payload
+    }),
+    setGift: action((state, payload) => {
+        state.gift = {}
+    }),
+    togglePublishing: action((state) => {
+        state.publishing = !state.publishing
+    }),
+    sendGift: thunk(() => {
+        if (!subscriberSession) {
+            return
+        }
+        subscriberSession.signal(
+            {
+                type: 'gift',
+                data: '',
+            },
+            function (err: any) {
+                if (err) {
+                    console.log('signal error: ' + err.message)
+                } else {
+                    console.log('signal sent')
                 }
-            )
-        }),
-    } as StreamModel,
+            }
+        )
+    }),
 }

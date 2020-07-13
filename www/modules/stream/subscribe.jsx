@@ -10,37 +10,38 @@ import wretch from 'wretch'
 import { Image, Box } from '@chakra-ui/core'
 
 import { OTSession, OTPublisher, OTStreams, OTSubscriber, preloadScript } from '../../pages/_app'
+import { Status } from '~/modules/stream/_stream'
 
 export let subscriberSession
 
 function Subscriber(props, context) {
     let setConnected = useStoreActions((actions) => actions.stream.setConnected)
-    let setImage = useStoreActions((actions) => actions.stream.setImage)
-
-    useAutoEffect(() => {
-        subscriberSession = context.session
-    })
+    let setStream = useStoreActions((actions) => actions.stream.setStream)
+    let setStatus = useStoreActions((actions) => actions.stream.setStatus)
     let subscriber = useRef()
 
     let subscribeEventHandlers = useAutoMemo({
         connected: () => {
             console.log('subscriber connected')
-            setConnected(true)
         },
         disconnected: () => {
             console.log('subscriber disconnected')
-            setConnected(false)
+            // setStatus(Status.IDLE)
         },
         destroyed: () => {
             console.log('subscriber destroyed')
-            setConnected(false)
+            // setStatus(Status.IDLE)
         },
         videoEnabled: () => {
             console.log('subscriber videoEnabled')
         },
         videoElementCreated: () => {
             console.log('subscriber videoElementCreated')
-            setImage(subscriber.current?.getSubscriber()?.getImgData())
+            setStream({
+                image: subscriber.current?.getSubscriber()?.getImgData(),
+                name: context?.streams[0]?.name ?? '',
+            })
+            subscriberSession = context.session
         },
         videoDisabled: () => {
             console.log('subscriber videoDisabled')
@@ -101,9 +102,9 @@ export default function Subscribe() {
         console.log('Subscriber MOUNTED')
     })
 
-    let router = useRouter()
-    let storeSessionId = useStoreState((state) => state.stream.sessionId)
-    let sessionId = router.query.sessionId || storeSessionId
+    // let router = useRouter()
+    let sessionId = useStoreState((state) => state.stream.sessionId)
+    // let sessionId = router.query.sessionId || storeSessionId
     // console.log('*** Subscriber sessionId', sessionId)
 
     let { data, isLoading, error } = useQuery(
@@ -130,7 +131,14 @@ export default function Subscribe() {
     // }
     return (
         <Box d='flex' justifyContent='center' pos='relative'>
-            {anime && <Image src='fireworks.gif' zIndex={100} pos='absolute' ml='-17px' />}
+            {anime && (
+                <Image
+                    src='fireworks1.gif'
+                    zIndex={100}
+                    pos='absolute'
+                    // ml='-17px'
+                />
+            )}
             <OTSession
                 apiKey={data.apiKey}
                 sessionId={data.sessionId}

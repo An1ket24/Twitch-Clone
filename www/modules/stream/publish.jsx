@@ -6,14 +6,23 @@ import { Divider, Image, Box, Text, IconButton, Collapse, Icon } from '@chakra-u
 import { useUnmount, useUpdateEffect, useMount } from 'react-use'
 import wretch from 'wretch'
 import { useMutation, useQuery } from 'react-query'
+import UAParser from 'ua-parser-js'
 
 import { OTSession, OTPublisher, OTStreams, OTSubscriber, preloadScript } from '~/pages/_app'
 import { useRouter } from 'next/router'
 
+const getDeviceString = () => {
+    let parser = new UAParser()
+    console.log('parser.getResult()', parser.getResult())
+    let { device, os, browser } = parser.getResult()
+    let deviceString = `${browser.name} ${os.name} ${device.model ?? ''}`
+    console.log('deviceString', deviceString)
+    return deviceString
+}
+
 export default function Publish() {
     let gift = useStoreState((state) => state.stream.gift)
-
-    let setConnected = useStoreActions((actions) => actions.stream.setConnected)
+    // let setConnected = useStoreActions((actions) => actions.stream.setConnected)
     let setGift = useStoreActions((actions) => actions.stream.setGift)
 
     const [anime, setAnime] = useState(false, 'setAnime')
@@ -28,7 +37,7 @@ export default function Publish() {
         },
         sessionDisconnected: () => {
             console.log('publisher session disconnected')
-            setConnected(false)
+            // setConnected(false)
         },
         'signal:gift': (e) => {
             console.log('gift received: e', e)
@@ -39,11 +48,11 @@ export default function Publish() {
     let publisherEventHandlers = useAutoMemo({
         destroyed: () => {
             console.log('publisher destroyed')
-            setConnected(false)
+            // setConnected(false)
         },
         streamCreated: () => {
             console.log('publisher streamCreated')
-            setConnected(true)
+            // setConnected(true)
 
             let p = publisher.current.getPublisher()
             console.log('publisher videoHeight', p.videoHeight())
@@ -51,7 +60,7 @@ export default function Publish() {
         },
         streamDestroyed: () => {
             console.log('publisher streamDestroyed')
-            setConnected(false)
+            // setConnected(false)
         },
     })
 
@@ -88,7 +97,14 @@ export default function Publish() {
     console.log('publisher data', data)
     return (
         <Box d='flex' justifyContent='center'>
-            {anime && <Image src='fireworks.gif' zIndex={100} pos='absolute' ml='-17px' />}
+            {anime && (
+                <Image
+                    src='fireworks1.gif'
+                    zIndex={100}
+                    pos='absolute'
+                    // ml='-17px'
+                />
+            )}
 
             <OTSession
                 apiKey={data.apiKey}
@@ -109,6 +125,7 @@ export default function Publish() {
                         publishVideo: true,
                         videoSource: undefined,
                         fitMode: 'cover',
+                        name: getDeviceString(),
                         // height: '100%',
                     }}
                     onPublish={() => {

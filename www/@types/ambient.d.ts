@@ -11,3 +11,4 @@ declare namespace NodeJS {
 
 declare module 'opentok-react'
 declare module '@opentok/client'
+declare module 'opentok'
