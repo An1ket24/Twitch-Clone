@@ -9,7 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             throw new CustomError('Only POST allowed', 400)
         }
         let sessionId = req.query.sessionId as string
-        let role = req.query.role as Role
+        let role = req.query.role as string
         let token = opentok.generateToken(sessionId, { role, expireTime: new Date().getTime() / 60 + 3600 * 5 })
         return res.status(200).json({ sessionId, apiKey: process.env.OPENTOK_PROJECT_API_KEY, token })
     } catch (error) {

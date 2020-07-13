@@ -21,6 +21,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 //     })
 // }
 
+export type Session = { id: string }
+
 export let opentok = new OpenTok(process.env.OPENTOK_PROJECT_API_KEY, process.env.OPENTOK_PROJECT_SECRET)
 export let graphQLClient = new GraphQLClient('https://graphql.fauna.com/graphql', {
     headers: {

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { graphQLClient, opentok } from '~/pages/api/common'
+import { graphQLClient, opentok, Session } from '~/pages/api/common'
 
 let query = /* GraphQL */ `
     query {
@@ -12,8 +12,7 @@ let query = /* GraphQL */ `
     }
 `
 
-export type Session = { id: string }
-export type ApiFeedAllResult = { sessions: [{ id: string }] }
+export type ApiFeedAllResult = { sessions: [Session] }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {

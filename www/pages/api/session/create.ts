@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { graphQLClient, opentok } from '~/pages/api/common'
+import { graphQLClient, opentok, Session } from '~/pages/api/common'
 
 let query = /* GraphQL */ `
     mutation CreateSession($id: ID!) {
@@ -17,11 +17,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             throw Error('Only POST allowed')
         }
         return new Promise((resolve) => {
-            opentok.createSession({ mediaMode: 'routed' }, async function (error, session) {
+            opentok.createSession({ mediaMode: 'routed' }, async function (error: Error, session: any) {
                 if (error) {
                     throw Error(error.message)
                 }
-                console.log('sessionId', session!.sessionId)
+                console.log('sessionId', session.sessionId)
                 let result = await graphQLClient.request(query, { id: session!.sessionId })
                 let { _id, id: sessionId } = result.createSession
                 let token = opentok.generateToken(sessionId, { role: 'publisher' })
