@@ -6,7 +6,7 @@ export const BackLink = () => {
     return (
         <Link href='/'>
             <IconButton
-                zIndex={100}
+                zIndex={10000}
                 top='14px'
                 left='0px'
                 pos='absolute'
