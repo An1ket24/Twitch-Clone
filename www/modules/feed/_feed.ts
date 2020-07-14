@@ -28,35 +28,28 @@ export const feedModel: FeedModel = {
     onStreamStatus: thunkOn(
         (actions, storeActions) => storeActions.stream.setStatus,
         (actions, target, { getState, getStoreState, getStoreActions }) => {
-            console.log('target.payload', target.payload)
             if (target.payload === Status.STREAMING) {
                 streamStartTime = new Date().getTime()
                 getState().streams.set(getStoreState().stream.sessionId, getStoreState().stream.stream)
-                // actions.nextIndex()
             }
 
-            console.log('1')
             if (intRef && target.payload !== Status.CONNECTING) {
-                console.log('1.5')
                 clearInterval(intRef)
                 intRef = undefined
             }
             if (!intRef && target.payload === Status.CONNECTING && getStoreState().stream.sessionId) {
-                console.log('2')
                 intRef = setInterval(() => {
-                    console.log('3')
-                    if (getStoreState().stream.status === Status.CONNECTING) {
-                        console.log('4')
-                        let { sessionId } = getStoreState().stream
-                        getStoreActions().stream.setSessionId(undefined)
-                        console.log('*** setSessionId(undefined)')
-                        setTimeout(() => {
-                            getStoreActions().stream.setSessionId(sessionId)
-                        }, 500)
-                    } else {
-                        console.log('5')
-                        clearInterval(intRef)
-                        intRef = undefined
+                    if (intRef) {
+                        if (getStoreState().stream.status === Status.CONNECTING) {
+                            let { sessionId } = getStoreState().stream
+                            getStoreActions().stream.setSessionId(undefined)
+                            setTimeout(() => {
+                                getStoreActions().stream.setSessionId(sessionId)
+                            }, 500)
+                        } else {
+                            clearInterval(intRef)
+                            intRef = undefined
+                        }
                     }
                 }, 8000)
             }
@@ -68,7 +61,6 @@ export const feedModel: FeedModel = {
     nextIndex: thunk((actions, _, { getState, getStoreState, getStoreActions }) => {
         let feed = queryCache.getQueryData<ApiFeedAllResult>('feed')
         let feedLen = feed?.sessions?.length
-        console.log('feed', feed)
         if (
             feed &&
             feedLen &&
@@ -78,8 +70,6 @@ export const feedModel: FeedModel = {
             let currentIndex = getState().currentIndex < feedLen - 1 ? getState().currentIndex + 1 : 0
             actions.setCurrentIndex(currentIndex)
             if (getStoreState().stream.sessionId === feed.sessions[currentIndex].id) {
-                console.log('getStoreState().stream.status', getStoreState().stream.status)
-                console.log('nextIndex getStoreActions().stream.setSessionId(undefined)')
                 getStoreActions().stream.setSessionId(undefined)
             } else {
                 getStoreActions().stream.setSessionId(feed.sessions[currentIndex].id)

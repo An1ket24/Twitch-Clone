@@ -28,6 +28,6 @@
             "~/*": ["./*"]
         }
     },
-    "exclude": ["node_modules"],
+    "exclude": ["node_modules", "public"],
     "include": ["next-env.d.ts", "./**/*.ts", "./**/*.tsx", "./**/*.jsx", "./**/*.js", "./@types/ambient.d.ts"]
 }
