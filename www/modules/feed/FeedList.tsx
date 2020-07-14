@@ -106,7 +106,7 @@ const Element = memo((props: { index: number; sessionId?: string }) => {
 
     return (
         // <Link href={`/inbound-stream?image=${image}`}>
-        <Link href={`/inbound-stream?sessionId=${props.sessionId}`}>
+        <Link href={props.sessionId ? `/inbound-stream?sessionId=${props.sessionId}` : ''}>
             <a>
                 <Box h='198px' bg='#4F4F4F' pos='relative' overflow='hidden' d='flex' justifyContent='center'>
                     <Views p='3px' d='flex' pos='absolute' top='15px' left='15px'>

@@ -8,3 +8,4 @@
 - change map into json
 - stream component reparenting
 - nextjs - keep components mounted
+- fix back button while streaming
