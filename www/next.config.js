@@ -1,4 +1,6 @@
-module.exports = {
+const withPWA = require('next-pwa')
+
+module.exports = withPWA({
     // experimental: {
     //     jsconfigPaths: true, // enables it for both jsconfig.json and tsconfig.json
     // },
@@ -8,4 +10,7 @@ module.exports = {
     // generateBuildId: async () => {
     //     return 'constant-build-id'
     // },
-}
+    pwa: {
+        dest: 'public',
+    },
+})

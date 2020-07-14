@@ -41,7 +41,69 @@ const Auth: FC = ({ children }) => {
 
 function App({ Component, pageProps }: AppProps) {
     console.log('App MOUNT')
+    useEffect(() => {
+        if (typeof window !== 'undefined' && 'serviceWorker' in navigator && window.workbox !== undefined) {
+            // add event listeners to handle any of PWA lifecycle event
+            // https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-window.Workbox#events
+            window.workbox.addEventListener('installed', (event) => {
+                console.log(`Event ${event.type} is triggered.`)
+                console.log(event)
+            })
 
+            window.workbox.addEventListener('controlling', (event) => {
+                console.log(`Event ${event.type} is triggered.`)
+                console.log(event)
+            })
+
+            window.workbox.addEventListener('activated', (event) => {
+                console.log(`Event ${event.type} is triggered.`)
+                console.log(event)
+            })
+
+            // A common UX pattern for progressive web apps is to show a banner when a service worker has updated and waiting to install.
+            // NOTE: set skipWaiting to false in next.config.js pwa object
+            // https://developers.google.com/web/tools/workbox/guides/advanced-recipes#offer_a_page_reload_for_users
+            window.workbox.addEventListener('waiting', (event) => {
+                if (confirm('A new version is installed, reload to use the new version immediately?')) {
+                    window.workbox.addEventListener('controlling', (event) => {
+                        window.location.reload()
+                    })
+                    window.workbox.messageSW({ type: 'SKIP_WAITING' })
+                } else {
+                    // User rejected, new verion will be automatically load when user open the app next time.
+                }
+            })
+
+            // ISSUE - this is not working as expected, why?
+            // I could only make message event listenser work when I manually add this listenser into sw.js file
+            window.workbox.addEventListener('message', (event) => {
+                console.log(`Event ${event.type} is triggered.`)
+                console.log(event)
+            })
+
+            /*
+          window.workbox.addEventListener('redundant', event => {
+            console.log(`Event ${event.type} is triggered.`)
+            console.log(event)
+          })
+          window.workbox.addEventListener('externalinstalled', event => {
+            console.log(`Event ${event.type} is triggered.`)
+            console.log(event)
+          })
+          window.workbox.addEventListener('externalactivated', event => {
+            console.log(`Event ${event.type} is triggered.`)
+            console.log(event)
+          })
+          window.workbox.addEventListener('externalwaiting', event => {
+            console.log(`Event ${event.type} is triggered.`)
+            console.log(event)
+          })
+          */
+
+            // never forget to call register as auto register is turned off in next.config.js
+            window.workbox.register()
+        }
+    }, [])
     return (
         <ThemeProvider theme={theme}>
             <ReactQueryConfigProvider config={{ queries: { refetchOnWindowFocus: false } }}>
@@ -68,19 +130,13 @@ function App({ Component, pageProps }: AppProps) {
                 <StoreProvider store={store}>
                     <StateInspector name='App'>
                         <Head>
-                            {/* <meta charSet='utf-8' name='viewport' content='width=1170' /> */}
                             <meta
                                 charSet='utf-8'
                                 name='viewport'
                                 content='width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, maximum-scale=1'
                             />
-                            {/* <script defer async src='https://static.opentok.com/v2/js/opentok.min.js' /> */}
 
-                            <meta name='description' content='WEB-RTC' />
-                            <meta name='apple-mobile-web-app-capable' content='yes' />
-                            <meta name='mobile-web-app-capable' content='yes' />
-                            <meta name='apple-mobile-web-app-status-bar-style' content='black' />
-                            <title>Web RTC</title>
+                            <title>Freedom</title>
                             <link
                                 href='https://fonts.googleapis.com/css2?family=Roboto&display=swap'
                                 rel='stylesheet'
@@ -89,7 +145,6 @@ function App({ Component, pageProps }: AppProps) {
                                 href='https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap'
                                 rel='stylesheet'
                             />
-                            <link rel='icon' type='image/x-icon' href='favicon.ico' />
                         </Head>
 
                         <Auth>

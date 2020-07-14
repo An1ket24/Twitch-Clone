@@ -1,3 +1,11 @@
+import { Workbox } from 'workbox-window'
+
+declare global {
+    interface Window {
+        workbox: Workbox
+    }
+}
+
 declare namespace NodeJS {
     export interface ProcessEnv {
         NODE_ENV: string
