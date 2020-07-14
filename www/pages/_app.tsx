@@ -40,7 +40,7 @@ const Auth: FC = ({ children }) => {
 }
 
 function App({ Component, pageProps }: AppProps) {
-    console.log('App MOUNT')
+    console.log('App Render')
     useEffect(() => {
         if (typeof window !== 'undefined' && 'serviceWorker' in navigator && window.workbox !== undefined) {
             // add event listeners to handle any of PWA lifecycle event
