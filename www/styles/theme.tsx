@@ -1,5 +1,6 @@
 import { theme as defaultTheme } from '@chakra-ui/core'
 
+console.log('defaultTheme.colors', defaultTheme.colors)
 export const theme = {
     ...defaultTheme,
     radii: { ...defaultTheme.radii, xl: '1rem', xxl: '2rem' },
@@ -23,6 +24,18 @@ export const theme = {
             '750': '#2D3748',
             '800': '#1A202C',
             '900': '#171923',
+        },
+        publishButton: {
+            '50': '#DF2080',
+            '100': '#DF2080',
+            '200': '#DF2080',
+            '500': '#DF2080',
+            '600': '#DF2080',
+            '700': '#DF2080',
+            '650': '#DF2080',
+            '750': '#DF2080',
+            '800': '#DF2080',
+            '900': '#DF2080',
         },
     },
     icons: {

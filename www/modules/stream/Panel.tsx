@@ -37,7 +37,8 @@ export const Panel: FC<{ outbound?: boolean }> = ({ outbound }) => {
                     {...font20}
                     fontWeight='bold'
                     color='white'
-                    bg='#DF2080'
+                    variantColor='publishButton'
+                    // bg='#DF2080'
                     borderRadius='3px'
                     w={outbound ? '180px' : '72px'}
                     h='38px'
