@@ -36,76 +36,15 @@ let images = [
     'video12.jpg',
 ]
 
-// const Element = memo((props: { index: number; liveLen: number; sessionId: string }) => {
 const Element = memo((props: { index: number; sessionId?: string }) => {
-    // let isGetImageIndex = useStoreState((state) => state.feed.isGetImageIndex)
-    // let storeImage = useStoreState((state) => state.stream.image)
-    // let setIsGetImageIndex = useStoreActions((actions) => actions.feed.setIsGetImageIndex)
-    // let setSessionId = useStoreActions((actions) => actions.stream.setSessionId)
-
-    // let title = useAutoMemo(() => faker.lorem.sentence())
-    // let image = useAutoMemo(images[index % images.length])
-    // let { data, isLoading, error } = useQuery('getSubscriberToken', () =>
-    //     wretch(`/api/session/getSubscriberToken/${sessionId}`).post().json()
-    // )
-
-    // useAutoEffect(() => {
-    //     if (data) {
-    //         let session = OT.initSession(data.apiKey, sessionId)
-    //         OT.connect(data.token, (err) => {})
-    //     }
-    // })
-
-    // let [image, setImage] = useState('', `setImage at index ${props.index}`)
-    // let onImage = useAutoCallback((_image) => {
-    //     setImage(_image)
-    //     console.log('image', _image.length)
-    // })
-
-    // console.log('isGetImageIndex', isGetImageIndex)
-    // console.log('props.index', props.index)
-
-    // let isRealStream = props.index < props.liveLen
-    // useAutoEffect(() => {
-    //     if (isRealStream && isGetImageIndex === props.index) {
-    //         setSessionId(props.sessionId)
-    //     }
-    // })
-    // useAutoEffect(() => {
-    //     if (isRealStream && isGetImageIndex === props.index) {
-    //         if (storeImage) {
-    //             console.log('HERE IS AN IMAGE')
-    //             console.log('image', storeImage.length)
-    //             setIsGetImageIndex(undefined)
-    //             setImage(storeImage)
-    //         } else {
-    //             setSessionId(props.sessionId)
-    //         }
-    //     }
-    // })
-    // useAutoEffect(() => {
-    //     if (isRealStream && isGetImageIndex === props.index) {
-    //         if (storeImage) {
-    //             console.log('HERE IS AN IMAGE')
-    //             console.log('image', storeImage.length)
-    //             setIsGetImageIndex(undefined)
-    //             setImage(storeImage)
-    //         } else {
-    //             setSessionId(props.sessionId)
-    //         }
-    //     }
-    // })
-
     let stream = useStoreState((state) => state.feed.getStream(props.sessionId))
     let nViews = useAutoMemo(() => Math.floor(Math.random() * 1000))
 
     let image = stream?.image ? `data:image/png;base64,${stream?.image}` : images[props.index]
     let title = useAutoMemo(() => faker.lorem.sentence())
     title = stream?.name ?? title
-    // image = isRealStream ? image && `data:image/png;base64,${image}` : images[props.index - props.liveLen]
 
     return (
-        // <Link href={`/inbound-stream?image=${image}`}>
         <Link href={props.sessionId ? `/inbound-stream?sessionId=${props.sessionId}` : ''}>
             <a>
                 <Box h='198px' bg='#4F4F4F' pos='relative' overflow='hidden' d='flex' justifyContent='center'>
@@ -123,7 +62,6 @@ const Element = memo((props: { index: number; sessionId?: string }) => {
                         <Box as={Head} />
                     </Box>
                     {title}
-                    {/* {isRealStream ? streamName : title} */}
                 </Box>
             </a>
         </Link>
@@ -140,9 +78,7 @@ export function List() {
             refetchInterval: 1000,
         }
     )
-
     console.log('data', data)
-
     if (data) {
         data.sessions = data.sessions.sort((a, b) => (a.id < b.id ? 1 : -1))
     }
@@ -155,31 +91,13 @@ export function List() {
         overscan: 5,
     })
 
-    // This logic intended to render Element/Subscribe component one at a time
-    let reset = useStoreActions((actions) => actions.feed.reset)
     let nextIndex = useStoreActions((actions) => actions.feed.nextIndex)
-    // const [fetchImageIndex, setFetchImageIndex] = useState(0, 'setFetchImageIndex')
-    // const [saveFetchImageIndex, setSaveFetchImageIndex] = useState(0, 'setSaveFetchImageIndex')
-    // let onImageSet = useAutoCallback(() => {
-    //     // setTimeout(() => setFetchImageIndex(fetchImageIndex >= len - 1 ? 0 : fetchImageIndex + 1), 2000)
-    //     setFetchImageIndex(-1) // unmount Subscriber
-    // })
-
-    // Mount next Subscriber in order to read snapshot
-    // useUnmount(() => {
-    // reset()
-    // })
     useAutoEffect(() => {
         let intRef = setInterval(() => nextIndex(), 500)
         return () => {
             clearInterval(intRef)
         }
     })
-    // useAutoEffect(() => {
-    //     if (fetchImageIndex >= len) {
-    //         setFetchImageIndex(0)
-    //     }
-    // })
 
     return (
         <Container ref={parentRef} w='full' h='full'>
@@ -198,7 +116,6 @@ export function List() {
                             <Element
                                 index={virtualRow.index}
                                 sessionId={data?.sessions?.[virtualRow.index]?.id ?? data?.sessions?.[0]?.id}
-                                // liveLen={liveLen}
                             />
                         </Box>
                     )

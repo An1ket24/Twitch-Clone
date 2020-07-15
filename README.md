@@ -1,6 +1,5 @@
 # TODO
 - show deployed version
-- PWA
 - snapshot from s3
 - live preview
 - scroll -> remove controls (fullscreen)
@@ -9,3 +8,9 @@
 - stream component reparenting
 - nextjs - keep components mounted
 - fix back button while streaming
+- api opentok promisify
+- api middleware - cors, error
+- separate subscribe/publish stores
+- rebuild opentok-react
+- use opentok script
+- separate panel component

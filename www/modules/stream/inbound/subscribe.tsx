@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import { useState } from 'reinspect'
 import { useUnmount, useUpdateEffect, useMount } from 'react-use'
-import { useAutoCallback, useAutoMemo, useAutoEffect, useLayoutAutoEffect } from 'hooks.macro'
+import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { useStoreState, useStoreActions } from '~/store/store'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
@@ -9,14 +9,15 @@ import { useMutation, useQuery } from 'react-query'
 import wretch from 'wretch'
 import { Image, Box } from '@chakra-ui/core'
 
-import { OTSession, OTPublisher, OTStreams, OTSubscriber, preloadScript } from '../../pages/_app'
-import { Status } from '~/modules/stream/_stream'
+import { OTSession, OTPublisher, OTStreams, OTSubscriber } from '~/pages/_app'
 
-export let subscriberSession
+export let subscriberSession: any
 
-function Subscriber(props, context) {
-    let setStream = useStoreActions((actions) => actions.stream.setStream)
-    let subscriber = useRef()
+function Subscriber(props: { serviceRender: boolean }, context: any) {
+    let setStream = useStoreActions((actions) => actions.stream.inbound.setStream)
+    let sessionId = useStoreState((state) => state.stream.inbound.sessionId)
+
+    let subscriber = useRef<any>()
 
     let subscribeEventHandlers = useAutoMemo({
         connected: () => {
@@ -36,6 +37,7 @@ function Subscriber(props, context) {
         videoElementCreated: () => {
             console.log('subscriber videoElementCreated')
             setStream({
+                sessionId,
                 image: subscriber.current?.getSubscriber()?.getImgData(),
                 name: context?.streams[0]?.name ?? '',
             })
@@ -53,13 +55,11 @@ function Subscriber(props, context) {
                 subscribeToAudio: props.serviceRender ? false : true,
                 subscribeToVideo: true,
                 fitMode: 'contain',
-                // height: '100%',
-                // width: '100%',
             }}
             onSubscribe={() => {
                 console.log('subscribed')
             }}
-            onError={(err) => {
+            onError={(err: any) => {
                 console.log('subscriber error', err)
             }}
             eventHandlers={subscribeEventHandlers}
@@ -74,7 +74,7 @@ Subscriber.contextTypes = {
     streams: PropTypes.arrayOf(PropTypes.object),
 }
 
-export default function Subscribe(props) {
+export default function Subscribe(props: { serviceRender: boolean }) {
     let setGift = useStoreActions((actions) => actions.stream.setGift)
     let gift = useStoreState((state) => state.stream.gift)
     const [anime, setAnime] = useState(false, 'setAnime')
@@ -82,20 +82,13 @@ export default function Subscribe(props) {
         setAnime(true)
         setTimeout(() => setAnime(false), 4000)
     }, [gift])
-    let resetStreamStore = useStoreActions((actions) => actions.stream.reset)
+
     useUnmount(() => {
-        console.log('*** Subscriber UNMOUNTED')
-        resetStreamStore()
+        console.log('Subscriber UNMOUNTED')
     })
     useMount(() => {
-        console.log('*** Subscriber MOUNTED')
+        console.log('Subscriber MOUNTED')
     })
-    useAutoEffect(() => {
-        console.log('*** Subscriber useAutoEffect')
-    })
-    useEffect(() => {
-        console.log('*** Subscriber useEffect')
-    }, [])
 
     let eventHandlers = useAutoMemo({
         sessionConnected: () => {
@@ -104,39 +97,25 @@ export default function Subscribe(props) {
         sessionDisconnected: () => {
             console.log('subscriber session disconnected')
         },
-        'signal:gift': (e) => {
+        'signal:gift': (e: any) => {
             console.log('gift received: e', e)
             setGift('')
         },
     })
 
-    // let router = useRouter()
-    let sessionId = useStoreState((state) => state.stream.sessionId)
-    // let sessionId = router.query.sessionId || storeSessionId
-    // console.log('*** Subscriber sessionId', sessionId)
+    let sessionId = useStoreState((state) => state.stream.inbound.sessionId)
 
     let { data, isLoading, error } = useQuery(
         ['getSubscriberToken', sessionId],
         () => wretch(`/api/session/getToken/subscriber/${sessionId}`).post().json(),
         { staleTime: 5 * 60 * 1000, refetchOnMount: false }
     )
-    // console.log('-----data', data)
-
-    // const [r, setR] = useState(true, 'setR')
-    // useEffect(() => {
-    //     setTimeout(() => setR(true), 1000)
-    //     return () => setR(false)
-    // }, [data])
 
     if (!data) {
         return null
     }
     console.log('subscriber data', data)
 
-    // console.log('### rendering subscriber', r)
-    // if (!r) {
-    //     return null
-    // }
     return (
         <Box d={props.serviceRender ? 'none' : 'flex'} justifyContent='center' pos='relative'>
             <Image
@@ -146,7 +125,6 @@ export default function Subscribe(props) {
                 zIndex={100}
                 pos='absolute'
                 h='100%'
-                // ml='-17px'
             />
             <OTSession
                 apiKey={data.apiKey}
@@ -156,7 +134,7 @@ export default function Subscribe(props) {
                 onConnect={() => {
                     console.log('subscriber session connected')
                 }}
-                onError={(err) => {
+                onError={(err: any) => {
                     console.log('subscriber session error', err)
                 }}
             >

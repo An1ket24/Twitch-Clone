@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useState } from 'reinspect'
-import { useAutoCallback, useAutoMemo, useAutoEffect, useLayoutAutoEffect } from 'hooks.macro'
+import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { useStoreState, useStoreActions } from '~/store/store'
 import { Divider, Image, Box, Text, IconButton, Collapse, Icon } from '@chakra-ui/core'
 import { useUnmount, useUpdateEffect, useMount } from 'react-use'
@@ -8,21 +8,18 @@ import wretch from 'wretch'
 import { useMutation, useQuery } from 'react-query'
 import UAParser from 'ua-parser-js'
 
-import { OTSession, OTPublisher, OTStreams, OTSubscriber, preloadScript } from '~/pages/_app'
+import { OTSession, OTPublisher, OTStreams, OTSubscriber } from '~/pages/_app'
 import { useRouter } from 'next/router'
 
 const getDeviceString = () => {
     let parser = new UAParser()
-    console.log('parser.getResult()', parser.getResult())
     let { device, os, browser } = parser.getResult()
     let deviceString = `${browser.name} ${os.name} ${device.model ?? ''}`
-    console.log('deviceString', deviceString)
     return deviceString
 }
 
 export default function Publish() {
     let gift = useStoreState((state) => state.stream.gift)
-    // let setConnected = useStoreActions((actions) => actions.stream.setConnected)
     let setGift = useStoreActions((actions) => actions.stream.setGift)
 
     const [anime, setAnime] = useState(false, 'setAnime')
@@ -30,10 +27,9 @@ export default function Publish() {
         setAnime(true)
         setTimeout(() => setAnime(false), 4000)
     }, [gift])
-    let resetStreamStore = useStoreActions((actions) => actions.stream.reset)
+
     useUnmount(() => {
         console.log('Publisher UNMOUNTED')
-        resetStreamStore()
     })
     useMount(() => {
         console.log('Publisher MOUNTED')
@@ -47,12 +43,12 @@ export default function Publish() {
             console.log('publisher session disconnected')
             // setConnected(false)
         },
-        'signal:gift': (e) => {
+        'signal:gift': (e: any) => {
             console.log('gift received: e', e)
             setGift('')
         },
     })
-    let publisher = useRef()
+    let publisher = useRef<any>()
     let publisherEventHandlers = useAutoMemo({
         destroyed: () => {
             console.log('publisher destroyed')
@@ -82,7 +78,7 @@ export default function Publish() {
             .json()
     )
 
-    useAutoEffect(() => {
+    useMount(() => {
         createResource()
     })
     useAutoEffect(() => {
@@ -90,19 +86,11 @@ export default function Publish() {
             router.push(`/outbound-stream?sessionId=${data.sessionId}`, undefined, { shallow: true })
         }
     })
-    // useUnmount(
-    //     () =>
-    //         data?._id &&
-    //         wretch(`/api/session/delete/${data._id}`)
-    //             .post()
-    //             .json()
-    //             .then((res) => console.log('deleted session', res))
-    //             .catch((err) => console.log('session delete error', err))
-    // )
     if (!data) {
         return null
     }
     console.log('publisher data', data)
+
     return (
         <Box d='flex' justifyContent='center' pos='relative'>
             <Image
@@ -113,7 +101,6 @@ export default function Publish() {
                 pos='absolute'
                 h='100%'
                 w='100%'
-                // ml='-17px'
             />
 
             <OTSession
@@ -124,7 +111,7 @@ export default function Publish() {
                 onConnect={() => {
                     console.log('publisher session connected')
                 }}
-                onError={(err) => {
+                onError={(err: any) => {
                     console.log('publisher session error', err)
                 }}
             >
@@ -136,7 +123,6 @@ export default function Publish() {
                         videoSource: undefined,
                         fitMode: 'contain',
                         name: getDeviceString(),
-                        // height: '100%',
                     }}
                     onPublish={() => {
                         console.log('published')
@@ -144,7 +130,7 @@ export default function Publish() {
                     onInit={() => {
                         console.log('publisher initialized')
                     }}
-                    onError={(err) => {
+                    onError={(err: any) => {
                         console.log('publisher error', err)
                     }}
                     eventHandlers={publisherEventHandlers}
@@ -153,3 +139,13 @@ export default function Publish() {
         </Box>
     )
 }
+
+// useUnmount(
+//     () =>
+//         data?._id &&
+//         wretch(`/api/session/delete/${data._id}`)
+//             .post()
+//             .json()
+//             .then((res) => console.log('deleted session', res))
+//             .catch((err) => console.log('session delete error', err))
+// )

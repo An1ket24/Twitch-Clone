@@ -1,99 +1,44 @@
-import {
-    ThunkOn,
-    thunkOn,
-    ActionOn,
-    actionOn,
-    Thunk,
-    thunk,
-    action,
-    Action,
-    createStore,
-    StoreProvider,
-    useStore,
-} from 'easy-peasy'
+import { ThunkOn, thunkOn, Thunk, thunk, action, Action } from 'easy-peasy'
 
-import { subscriberSession } from '~/modules/stream/subscribe'
-
-export type Stream = {
-    name: string
-    image: string
-}
-export enum Status {
-    IDLE = 'IDLE',
-    CONNECTING = 'CONNECTING',
-    STREAMING = 'STREAMING',
-}
+import { subscriberSession } from '~/modules/stream/inbound/subscribe'
+import { StoreModel } from '~/store/store'
+import { sleep } from '~/utils'
+import { inboundModel, InboundModel } from '~/modules/stream/inbound/_inbound'
+import { outboundModel, OutboundModel } from '~/modules/stream/outbound/_outbound'
 
 type Init = {
     gift?: object
-    serviceRender: boolean
-    publishing: boolean
-    sessionId: string | undefined
-    status: Status
-    stream: Stream | undefined
 }
 
 let init = {
     gift: undefined,
-    publishing: false,
-    serviceRender: true,
-    status: Status.IDLE,
-    stream: undefined,
-    sessionId: undefined,
 }
 
-type Listeners = {
-    onSessionId: ThunkOn<StreamModel>
-    onStream: ThunkOn<StreamModel>
-}
+type Listeners = {}
 
-let listeners: Listeners = {
-    onSessionId: thunkOn(
-        (actions) => actions.setSessionId,
-        (actions) => actions.setStatus(Status.CONNECTING)
-    ),
-    onStream: thunkOn(
-        (actions) => actions.setStream,
-        (actions) => actions.setStatus(Status.STREAMING)
-    ),
-}
+let listeners: Listeners = {}
 
 export type StreamModel = Init &
     Listeners & {
-        setServiceRender: Action<StreamModel, boolean>
-        togglePublishing: Action<StreamModel>
+        inbound: InboundModel
+        outbound: OutboundModel
         setGift: Action<StreamModel, string>
-        setSessionId: Action<StreamModel, string | undefined>
-        setStream: Action<StreamModel, Stream>
-        setStatus: Action<StreamModel, Status>
         reset: Action<StreamModel>
         sendGift: Thunk<StreamModel>
     }
 
 export const streamModel: StreamModel = {
+    inbound: inboundModel,
+    outbound: outboundModel,
     ...init,
-    sessionId: '',
+    ...listeners,
     reset: action((state) => {
+        console.log('RESETTING STREAM')
         Object.assign(state, init)
     }),
-    ...listeners,
-    setSessionId: action((state, payload) => {
-        state.sessionId = payload
-    }),
-    setStream: action((state, stream) => {
-        state.stream = stream
-    }),
-    setStatus: action((state, status) => {
-        state.status = status
-    }),
-    setServiceRender: action((state, payload) => {
-        state.serviceRender = payload
-    }),
+    // Intended to reload component -> refresh the session
     setGift: action((state, payload) => {
         state.gift = {}
-    }),
-    togglePublishing: action((state) => {
-        state.publishing = !state.publishing
     }),
     sendGift: thunk(() => {
         if (!subscriberSession) {
