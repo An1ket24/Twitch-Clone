@@ -27,10 +27,9 @@ export const Inbound = () => {
     let serviceRender = router.route === '/'
 
     const deltaRouterSessionId = useDelta(router.query.sessionId)
-    useConditionalEffect(
-        () => setSessionId(router.query.sessionId as string),
-        !!deltaRouterSessionId && !!deltaRouterSessionId.curr && deltaRouterSessionId.curr !== sessionId
-    )
+    useConditionalEffect(() => {
+        setSessionId(router.query.sessionId as string)
+    }, !!deltaRouterSessionId && !!deltaRouterSessionId.curr && deltaRouterSessionId.curr !== sessionId)
 
     console.log('Stream sessionId', sessionId)
     return (

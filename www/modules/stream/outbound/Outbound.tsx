@@ -20,11 +20,13 @@ import {
 
 export const OutBound = () => {
     let publishing = useStoreState((state) => state.stream.outbound.publishing)
-    let resetOutbound = useStoreActions((actions) => actions.stream.inbound.reset)
+    let resetOutbound = useStoreActions((actions) => actions.stream.outbound.reset)
 
     let router = useRouter()
     let outbound = router.route === '/outbound-stream'
-    useConditionalEffect(() => resetOutbound(), !!useDelta(outbound))
+    useConditionalEffect(() => {
+        resetOutbound()
+    }, !!useDelta(outbound))
 
     return (
         <StreamContainer>

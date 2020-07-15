@@ -4,7 +4,7 @@ import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { useState } from 'reinspect'
 import { useStoreState, useStoreActions } from '~/store/store'
 
-import { PanelContainer, PanelLeft, PanelButton, PanelGift } from '~/modules/stream/PanelComponents'
+import { PanelContainer, PanelLeft, PanelButton, PanelGift, PanelRight } from '~/modules/stream/PanelComponents'
 
 export const Panel: FC = () => {
     let sendGift = useStoreActions((actions) => actions.stream.sendGift)
@@ -13,12 +13,12 @@ export const Panel: FC = () => {
     return (
         <PanelContainer>
             <PanelLeft />
-            <Box ml='auto' d='flex' alignItems='center'>
+            <PanelRight>
                 <PanelGift />
                 <PanelButton w='72px' onClick={handleClick}>
                     'Go!'
                 </PanelButton>
-            </Box>
+            </PanelRight>
         </PanelContainer>
     )
 }

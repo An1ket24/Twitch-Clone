@@ -27,6 +27,13 @@ export const PanelLeft: FC = () => {
         </Box>
     )
 }
+export const PanelRight: FC = ({ children }) => {
+    return (
+        <Box ml='auto' d='flex' alignItems='center'>
+            {children}
+        </Box>
+    )
+}
 export const PanelGift: FC = () => {
     return (
         <>

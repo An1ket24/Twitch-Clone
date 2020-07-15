@@ -4,7 +4,7 @@ import { useAutoCallback, useAutoMemo, useAutoEffect } from 'hooks.macro'
 import { useState } from 'reinspect'
 import { useStoreState, useStoreActions } from '~/store/store'
 
-import { PanelContainer, PanelLeft, PanelButton } from '~/modules/stream/PanelComponents'
+import { PanelContainer, PanelLeft, PanelButton, PanelRight } from '~/modules/stream/PanelComponents'
 
 export const Panel: FC = () => {
     let publishing = useStoreState((state) => state.stream.outbound.publishing)
@@ -14,9 +14,11 @@ export const Panel: FC = () => {
     return (
         <PanelContainer>
             <PanelLeft />
-            <PanelButton w='180px' onClick={handleClick}>
-                {publishing ? 'Stop publishing' : 'Publish'}
-            </PanelButton>
+            <PanelRight>
+                <PanelButton w='180px' onClick={handleClick}>
+                    {publishing ? 'Stop publishing' : 'Publish'}
+                </PanelButton>
+            </PanelRight>
         </PanelContainer>
     )
 }
