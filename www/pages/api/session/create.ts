@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { graphQLClient, opentok, Session } from '~/pages/api/common'
+import { graphQLClient, opentok, Session, OPENTOK_PROJECT_API_KEY } from '~/pages/api/common'
 
 let query = /* GraphQL */ `
     mutation CreateSession($id: ID!) {
@@ -10,6 +10,11 @@ let query = /* GraphQL */ `
         }
     }
 `
+
+export const storeSession = async (id: string) => {
+    console.log('storing sessionId', id)
+    return graphQLClient.request(query, { id })
+}
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
@@ -22,10 +27,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     throw Error(error.message)
                 }
                 console.log('sessionId', session.sessionId)
-                let result = await graphQLClient.request(query, { id: session!.sessionId })
+                let result = await storeSession(session.sessionId)
                 let { _id, id: sessionId } = result.createSession
                 let token = opentok.generateToken(sessionId, { role: 'publisher' })
-                resolve(res.status(200).json({ _id, sessionId, apiKey: process.env.OPENTOK_PROJECT_API_KEY, token }))
+                resolve(res.status(200).json({ _id, sessionId, apiKey: OPENTOK_PROJECT_API_KEY, token }))
             })
         })
     } catch (error) {

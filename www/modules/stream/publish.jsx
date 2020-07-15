@@ -90,15 +90,15 @@ export default function Publish() {
             router.push(`/outbound-stream?sessionId=${data.sessionId}`, undefined, { shallow: true })
         }
     })
-    // useUnmount(
-    //     () =>
-    //         data?._id &&
-    //         wretch(`/api/session/delete/${data._id}`)
-    //             .post()
-    //             .json()
-    //             .then((res) => console.log('deleted session', res))
-    //             .catch((err) => console.log('session delete error', err))
-    // )
+    useUnmount(
+        () =>
+            data?._id &&
+            wretch(`/api/session/delete/${data._id}`)
+                .post()
+                .json()
+                .then((res) => console.log('deleted session', res))
+                .catch((err) => console.log('session delete error', err))
+    )
     if (!data) {
         return null
     }

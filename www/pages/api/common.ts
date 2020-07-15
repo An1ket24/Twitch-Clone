@@ -1,6 +1,31 @@
 import OpenTok from 'opentok'
 import { GraphQLClient } from 'graphql-request'
-import { NextApiRequest, NextApiResponse } from 'next'
+
+export type Session = { id: string }
+
+let isProd = process.env.NODE_ENV == 'production'
+console.log('isProd', isProd)
+export const OPENTOK_PROJECT_API_KEY = isProd
+    ? process.env.OPENTOK_PROJECT_API_KEY
+    : process.env.OPENTOK_PROJECT_API_KEY_DEV
+export let opentok = isProd
+    ? new OpenTok(process.env.OPENTOK_PROJECT_API_KEY, process.env.OPENTOK_PROJECT_SECRET)
+    : new OpenTok(process.env.OPENTOK_PROJECT_API_KEY_DEV, process.env.OPENTOK_PROJECT_SECRET_DEV)
+
+export let graphQLClient = new GraphQLClient('https://graphql.fauna.com/graphql', {
+    headers: {
+        authorization: `Bearer ${isProd ? process.env.FAUNA_DB_SECRET : process.env.FAUNA_DB_SECRET_DEV}`,
+    },
+})
+
+export class CustomError extends Error {
+    [key: string]: any
+    constructor(message: string, status?: number) {
+        super(message)
+        this.status = status
+    }
+}
+
 // import Cors from 'cors'
 
 // const cors = Cors({
@@ -20,20 +45,3 @@ import { NextApiRequest, NextApiResponse } from 'next'
 //         })
 //     })
 // }
-
-export type Session = { id: string }
-
-export let opentok = new OpenTok(process.env.OPENTOK_PROJECT_API_KEY, process.env.OPENTOK_PROJECT_SECRET)
-export let graphQLClient = new GraphQLClient('https://graphql.fauna.com/graphql', {
-    headers: {
-        authorization: `Bearer ${process.env.FAUNA_DB_SECRET}`,
-    },
-})
-
-export class CustomError extends Error {
-    [key: string]: any
-    constructor(message: string, status?: number) {
-        super(message)
-        this.status = status
-    }
-}

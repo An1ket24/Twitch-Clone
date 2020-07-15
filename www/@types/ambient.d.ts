@@ -6,6 +6,9 @@ declare namespace NodeJS {
         OPENTOK_PROJECT_API_KEY: string
         OPENTOK_PROJECT_SECRET: string
         FAUNA_DB_SECRET: string
+        FAUNA_DB_SECRET_DEV: string
+        OPENTOK_PROJECT_API_KEY_DEV: string
+        OPENTOK_PROJECT_SECRET_DEV: string
     }
 }
 

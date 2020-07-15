@@ -9,3 +9,7 @@
 - stream component reparenting
 - nextjs - keep components mounted
 - fix back button while streaming
+- FQL
+- Solve PWA POST error
+- if stream err - reload it
+- unite stores

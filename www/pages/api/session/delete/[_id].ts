@@ -11,6 +11,11 @@ let query = /* GraphQL */ `
     }
 `
 
+export const deleteSession = async (_id: string) => {
+    console.log('deleting _id', _id)
+    return graphQLClient.request(query, { _id })
+}
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         if (req.method !== 'POST') {
@@ -24,7 +29,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
                 try {
                     let { _id } = req.query
-                    let result = await graphQLClient.request(query, { _id })
+                    let result = await deleteSession(_id as string)
                     return resolve(res.status(200).json(result.deleteSession))
                 } catch (error) {
                     console.error(error)
