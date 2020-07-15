@@ -55,7 +55,7 @@ export const Stream = () => {
                     {!serviceRender && <BackLink />}
                     {outbound ? (
                         publishing && <Publish />
-                    ) : sessionId ? (
+                    ) : sessionId && !router.query.image ? (
                         <Subscribe serviceRender={serviceRender} />
                     ) : (
                         <Image src={(router.query.image as string) ?? ''} h='full' w='full' />
