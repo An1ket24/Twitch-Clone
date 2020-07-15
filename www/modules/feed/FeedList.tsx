@@ -38,75 +38,22 @@ let images = [
 
 // const Element = memo((props: { index: number; liveLen: number; sessionId: string }) => {
 const Element = memo((props: { index: number; sessionId?: string }) => {
-    // let isGetImageIndex = useStoreState((state) => state.feed.isGetImageIndex)
-    // let storeImage = useStoreState((state) => state.stream.image)
-    // let setIsGetImageIndex = useStoreActions((actions) => actions.feed.setIsGetImageIndex)
-    // let setSessionId = useStoreActions((actions) => actions.stream.setSessionId)
-
-    // let title = useAutoMemo(() => faker.lorem.sentence())
-    // let image = useAutoMemo(images[index % images.length])
-    // let { data, isLoading, error } = useQuery('getSubscriberToken', () =>
-    //     wretch(`/api/session/getSubscriberToken/${sessionId}`).post().json()
-    // )
-
-    // useAutoEffect(() => {
-    //     if (data) {
-    //         let session = OT.initSession(data.apiKey, sessionId)
-    //         OT.connect(data.token, (err) => {})
-    //     }
-    // })
-
-    // let [image, setImage] = useState('', `setImage at index ${props.index}`)
-    // let onImage = useAutoCallback((_image) => {
-    //     setImage(_image)
-    //     console.log('image', _image.length)
-    // })
-
-    // console.log('isGetImageIndex', isGetImageIndex)
-    // console.log('props.index', props.index)
-
-    // let isRealStream = props.index < props.liveLen
-    // useAutoEffect(() => {
-    //     if (isRealStream && isGetImageIndex === props.index) {
-    //         setSessionId(props.sessionId)
-    //     }
-    // })
-    // useAutoEffect(() => {
-    //     if (isRealStream && isGetImageIndex === props.index) {
-    //         if (storeImage) {
-    //             console.log('HERE IS AN IMAGE')
-    //             console.log('image', storeImage.length)
-    //             setIsGetImageIndex(undefined)
-    //             setImage(storeImage)
-    //         } else {
-    //             setSessionId(props.sessionId)
-    //         }
-    //     }
-    // })
-    // useAutoEffect(() => {
-    //     if (isRealStream && isGetImageIndex === props.index) {
-    //         if (storeImage) {
-    //             console.log('HERE IS AN IMAGE')
-    //             console.log('image', storeImage.length)
-    //             setIsGetImageIndex(undefined)
-    //             setImage(storeImage)
-    //         } else {
-    //             setSessionId(props.sessionId)
-    //         }
-    //     }
-    // })
-
     let stream = useStoreState((state) => state.feed.getStream(props.sessionId))
     let nViews = useAutoMemo(() => Math.floor(Math.random() * 1000))
 
-    let image = stream?.image ? `data:image/png;base64,${stream?.image}` : images[props.index]
+    let image = props.sessionId && stream?.image ? `data:image/png;base64,${stream?.image}` : images[props.index]
     let title = useAutoMemo(() => faker.lorem.sentence())
-    title = stream?.name ?? title
+    // title = stream?.name ?? title
     // image = isRealStream ? image && `data:image/png;base64,${image}` : images[props.index - props.liveLen]
 
     return (
         // <Link href={`/inbound-stream?image=${image}`}>
-        <Link href={props.sessionId ? `/inbound-stream?sessionId=${props.sessionId}` : ''}>
+        // <Link href={props.sessionId ? `/inbound-stream?sessionId=${props.sessionId}` : ''}>
+        <Link
+            href={`/inbound-stream?sessionId=${props.sessionId ?? ''}&image=${
+                props.sessionId ? '' : images[props.index]
+            }`}
+        >
             <a>
                 <Box h='198px' bg='#4F4F4F' pos='relative' overflow='hidden' d='flex' justifyContent='center'>
                     <Views p='3px' d='flex' pos='absolute' top='15px' left='15px'>
@@ -149,7 +96,8 @@ export function List() {
 
     let liveLen = data?.sessions.length ?? 0
     const rowVirtualizer = useVirtual({
-        size: liveLen + images.length,
+        // size: liveLen + images.length,
+        size: Math.max(liveLen, images.length),
         parentRef,
         estimateSize: useAutoCallback(() => 280),
         overscan: 5,
@@ -197,7 +145,8 @@ export function List() {
                         >
                             <Element
                                 index={virtualRow.index}
-                                sessionId={data?.sessions?.[virtualRow.index]?.id ?? data?.sessions?.[0]?.id}
+                                sessionId={data?.sessions?.[virtualRow.index]?.id}
+                                // sessionId={data?.sessions?.[virtualRow.index]?.id ?? data?.sessions?.[0]?.id}
                                 // liveLen={liveLen}
                             />
                         </Box>
