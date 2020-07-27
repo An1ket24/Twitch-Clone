@@ -1,4 +1,21 @@
-# TODO
+# Web RTC - Twitch clone
+
+## Libraries
+- Opentok api
+- Chakra.ui toolkit
+- easy-peasy store (redux)
+- Fauna graphql serverless database
+- Typescript
+- Next.js
+- React
+
+## Features
+- Unlimited streams and viewers
+- Feed list updated with new streamers
+- Sending gift to the stream
+- Chat simulation
+
+## TODO
 - show deployed version
 - PWA
 - snapshot from s3
