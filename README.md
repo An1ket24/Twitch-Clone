@@ -1,5 +1,8 @@
 # Web RTC - Twitch clone
 
+## Most up to date code is in restructure branch
+<https://github.com/lishine/web-rtc/tree/restructure>
+
 ## Libraries
 - Opentok api
 - Chakra.ui toolkit
