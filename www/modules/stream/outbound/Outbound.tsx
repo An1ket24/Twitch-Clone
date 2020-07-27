@@ -19,8 +19,8 @@ import {
 } from '../StreamComponents'
 
 export const OutBound = () => {
-    let publishing = useStoreState((state) => state.stream.outbound.publishing)
-    let resetOutbound = useStoreActions((actions) => actions.stream.outbound.reset)
+    let publishing = useStoreState((state) => state.stream.publishing)
+    let resetOutbound = useStoreActions((actions) => actions.stream.reset)
 
     let router = useRouter()
     let outbound = router.route === '/outbound-stream'

@@ -19,8 +19,8 @@ import {
 } from '../StreamComponents'
 
 export const Inbound = () => {
-    let sessionId = useStoreState((state) => state.stream.inbound.sessionId)
-    let setSessionId = useStoreActions((actions) => actions.stream.inbound.setSessionId)
+    let sessionId = useStoreState((state) => state.stream.sessionId)
+    let setSessionId = useStoreActions((actions) => actions.stream.setSessionId)
 
     // Differentiate whether mount only for snapshot or mount as a stream
     let router = useRouter()

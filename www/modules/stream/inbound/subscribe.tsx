@@ -14,8 +14,8 @@ import { OTSession, OTPublisher, OTStreams, OTSubscriber } from '~/pages/_app'
 export let subscriberSession: any
 
 function Subscriber(props: { serviceRender: boolean }, context: any) {
-    let setStream = useStoreActions((actions) => actions.stream.inbound.setStream)
-    let sessionId = useStoreState((state) => state.stream.inbound.sessionId)
+    let setStream = useStoreActions((actions) => actions.stream.setStream)
+    let sessionId = useStoreState((state) => state.stream.sessionId)
 
     let subscriber = useRef<any>()
 
@@ -103,7 +103,7 @@ export default function Subscribe(props: { serviceRender: boolean }) {
         },
     })
 
-    let sessionId = useStoreState((state) => state.stream.inbound.sessionId)
+    let sessionId = useStoreState((state) => state.stream.sessionId)
 
     let { data, isLoading, error } = useQuery(
         ['getSubscriberToken', sessionId],

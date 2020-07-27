@@ -1,4 +1,19 @@
 import { theme as defaultTheme } from '@chakra-ui/core'
+import { createStyles, StyleRules } from '@material-ui/core'
+import { Box } from '@chakra-ui/core'
+import styled from '@emotion/styled'
+
+const styles = styled.h1({})
+const styles = createStyles({
+    root: {
+        justifyContent: ''
+        flexDirection: 'column',
+    },
+})
+
+// const name = (params) => {
+// return <Box justifyContent='' />
+// }
 
 export const theme = {
     ...defaultTheme,

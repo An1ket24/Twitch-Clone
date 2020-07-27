@@ -10,6 +10,7 @@ import UAParser from 'ua-parser-js'
 
 import { OTSession, OTPublisher, OTStreams, OTSubscriber } from '~/pages/_app'
 import { useRouter } from 'next/router'
+import { Status } from '~/modules/stream/_stream'
 
 const getDeviceString = () => {
     let parser = new UAParser()
@@ -21,6 +22,7 @@ const getDeviceString = () => {
 export default function Publish() {
     let gift = useStoreState((state) => state.stream.gift)
     let setGift = useStoreActions((actions) => actions.stream.setGift)
+    let setStatus = useStoreActions((actions) => actions.stream.setStatus)
 
     const [anime, setAnime] = useState(false, 'setAnime')
     useUpdateEffect(() => {
@@ -33,6 +35,7 @@ export default function Publish() {
     })
     useMount(() => {
         console.log('Publisher MOUNTED')
+        setStatus(Status.CONNECTING)
     })
 
     let eventHandlers = useAutoMemo({
@@ -65,6 +68,10 @@ export default function Publish() {
         streamDestroyed: () => {
             console.log('publisher streamDestroyed')
             // setConnected(false)
+        },
+        videoElementCreated: () => {
+            console.log('subscriber videoElementCreated')
+            setStatus(Status.STREAMING)
         },
     })
 

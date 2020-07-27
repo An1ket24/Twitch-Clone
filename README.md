@@ -14,3 +14,7 @@
 - rebuild opentok-react
 - use opentok script
 - separate panel component
+- FQL
+- Solve PWA POST error
+- if stream err - reload it
+- unite stores

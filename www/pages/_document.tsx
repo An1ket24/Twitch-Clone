@@ -4,9 +4,9 @@ const APP_NAME = 'Freedom'
 const APP_DESCRIPTION = 'Freedom description'
 
 export default class extends Document {
-    static async getInitialProps(ctx) {
-        return await Document.getInitialProps(ctx)
-    }
+    // static async getInitialProps(ctx) {
+    //     return await Document.getInitialProps(ctx)
+    // }
 
     render() {
         return (
@@ -20,7 +20,6 @@ export default class extends Document {
                     <meta name='format-detection' content='telephone=no' />
                     <meta name='mobile-web-app-capable' content='yes' />
                     <meta name='theme-color' content='#FFFFFF' />
-                    {/* <meta name='apple-mobile-web-app-status-bar-style' content='black' /> */}
                     <meta
                         name='viewport'
                         content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover'

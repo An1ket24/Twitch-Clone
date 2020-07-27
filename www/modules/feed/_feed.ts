@@ -25,7 +25,7 @@ type Listeners = {
 }
 let listeners: Listeners = {
     onStream: thunkOn(
-        (actions, storeActions) => storeActions.stream.inbound.setStream,
+        (actions, storeActions) => storeActions.stream.setStream,
         (actions, target) => {
             streamStartTime = new Date().getTime()
             actions.updateStream(target.payload)
@@ -45,8 +45,8 @@ export const feedModel: FeedModel = {
     nextIndex: thunk((actions, _, { getState, getStoreState, getStoreActions }) => {
         let feed = queryCache.getQueryData<ApiFeedAllResult>('feed')
         let feedLen = feed?.sessions?.length
-        let { status } = getStoreState().stream.inbound
-        let { sessionId: currentSessionId } = getStoreState().stream.inbound
+        let { status } = getStoreState().stream
+        let { sessionId: currentSessionId } = getStoreState().stream
         if (
             feed &&
             feedLen &&
@@ -61,9 +61,9 @@ export const feedModel: FeedModel = {
             if (newSessionId === currentSessionId) {
                 // only one publisher -> This intended to reload session -> fresh snapshot
                 console.log('%%%%%%%%%% nextIndex subscriber FORCE REFRESH')
-                getStoreActions().stream.inbound.refresh()
+                getStoreActions().stream.refresh()
             } else {
-                getStoreActions().stream.inbound.setSessionId(newSessionId)
+                getStoreActions().stream.setSessionId(newSessionId)
             }
         }
     }),

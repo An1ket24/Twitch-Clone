@@ -7,8 +7,8 @@ import { useStoreState, useStoreActions } from '~/store/store'
 import { PanelContainer, PanelLeft, PanelButton, PanelRight } from '~/modules/stream/PanelComponents'
 
 export const Panel: FC = () => {
-    let publishing = useStoreState((state) => state.stream.outbound.publishing)
-    let togglePublishing = useStoreActions((actions) => actions.stream.outbound.togglePublishing)
+    let publishing = useStoreState((state) => state.stream.publishing)
+    let togglePublishing = useStoreActions((actions) => actions.stream.togglePublishing)
     let handleClick = useAutoCallback(() => togglePublishing())
 
     return (
