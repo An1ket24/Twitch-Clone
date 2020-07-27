@@ -9,6 +9,12 @@
 - Next.js
 - React
 
+## Demo
+### Feed
+![Feed](https://github.com/lishine/web-rtc/screenshot-feed.jpg "Feed")
+### Stream
+![Stream](https://github.com/lishine/web-rtc/screenshot-stream.gif "Stream")
+
 ## Features
 - Unlimited streams and viewers
 - Feed list updated with new streamers
