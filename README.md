@@ -15,6 +15,27 @@
 - Sending gift to the stream
 - Chat simulation
 
+## Instructions
+- Clone the repo
+- Create Opentok account
+  - create dev and prod project
+  - fill .env with OPENTOK_PROJECT_SECRET, OPENTOK_PROJECT_API_KEY as in env-template
+- Create Faunadb account
+  - create dev and prod database
+  - import scheme from db/scheme.gql
+  - create dev and prod DB Secret
+  - fill .env with FAUNA_DB_SECRET  as in env-template
+- Create Vercel account
+  - create a project from the repo
+  - **every push from the repo will create a deploy**
+  - create env variables in the admin panel: OPENTOK_PROJECT_API_KEY, OPENTOK_PROJECT_SECRET, FAUNA_DB_SECRET
+- The password for the interface is in www/store/authModel.ts
+- Install Develop
+  - yarn
+  - cd www && yarn
+- Develop
+  - cd www && yarn dev
+
 ## Demo
 ### Feed
 ![Feed](https://github.com/lishine/web-rtc/blob/master/screenshot-feed.jpg "Feed")
