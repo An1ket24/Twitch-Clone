@@ -9,17 +9,17 @@
 - Next.js
 - React
 
-## Demo
-### Feed
-![Feed](https://github.com/lishine/web-rtc/blob/master/screenshot-feed.jpg "Feed")
-### Stream
-![Stream](https://github.com/lishine/web-rtc/blob/master/screenshot-stream.gif "Stream")
-
 ## Features
 - Unlimited streams and viewers
 - Feed list updated with new streamers
 - Sending gift to the stream
 - Chat simulation
+
+## Demo
+### Feed
+![Feed](https://github.com/lishine/web-rtc/blob/master/screenshot-feed.jpg "Feed")
+### Stream
+![Stream](https://github.com/lishine/web-rtc/blob/master/screenshot-stream.gif "Stream")
 
 ## TODO
 - show deployed version
