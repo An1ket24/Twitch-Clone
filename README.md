@@ -11,9 +11,9 @@
 
 ## Demo
 ### Feed
-![Feed](https://github.com/lishine/web-rtc/screenshot-feed.jpg "Feed")
+![Feed](https://github.com/lishine/web-rtc/blob/master/screenshot-feed.jpg "Feed")
 ### Stream
-![Stream](https://github.com/lishine/web-rtc/screenshot-stream.gif "Stream")
+![Stream](https://github.com/lishine/web-rtc/blob/master/screenshot-stream.gif "Stream")
 
 ## Features
 - Unlimited streams and viewers
