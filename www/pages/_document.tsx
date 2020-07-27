@@ -4,9 +4,9 @@ const APP_NAME = 'Freedom'
 const APP_DESCRIPTION = 'Freedom description'
 
 export default class extends Document {
-    static async getInitialProps(ctx) {
-        return await Document.getInitialProps(ctx)
-    }
+    // static async getInitialProps(ctx) {
+    //     return await Document.getInitialProps(ctx)
+    // }
 
     render() {
         return (

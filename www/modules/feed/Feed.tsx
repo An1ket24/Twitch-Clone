@@ -18,7 +18,7 @@ export function Feed() {
             <Box px={xPadding} pb='3px' h='46px'>
                 <Top />
             </Box>
-            <Box as='hr' borderTopWidth='2px' borderColor='#E3E3E3' opacity='50%' />
+            <Box as='hr' borderTopWidth='2px' borderColor='#E3E3E3' opacity={0.5} />
             <Box pl={xPadding} h='47px'>
                 <Tags />
             </Box>
